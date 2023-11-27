@@ -4,11 +4,6 @@ namespace advent_of_code_2023;
 
 class Program
 {
-    private static readonly IEnumerable<PuzzleHandler> handlers = new PuzzleHandler[]
-    {
-        new Day1Part1(File.ReadAllLines("input/day1.txt"))
-    };
-
     static async Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand("Advent of Code 2023");
@@ -32,13 +27,16 @@ class Program
 
     private static async Task PuzzleHandler(int day, int part)
     {
-        Console.WriteLine($"Day: {day}");
-        Console.WriteLine($"Part: {part}");
+        Console.WriteLine("Advent of Code 2023");
+        Console.WriteLine($"Solving day {day} part {part}");
 
-        var solver = new PuzzleSolver(handlers);
+        var solver = new PuzzleSolver(new PuzzleHandler[]
+        {
+            new Day1Part1(File.ReadAllLines("input/day1.txt")),
+        });
+        string answer = await solver.Solve(day, part);
 
-        var result = solver.Solve(day, part);
-
-        Console.WriteLine($"Result: {await result}");
+        Console.WriteLine();
+        Console.WriteLine($"Answer: {answer}");
     }
 }

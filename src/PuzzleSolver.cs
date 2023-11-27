@@ -15,7 +15,7 @@ public class PuzzleSolver
 
         if (handler is null)
         {
-            return Task.FromException<string>(new Exception("No handler found."));
+            return Task.FromException<string>(new Exception($"No puzzle handler found for day {day} part {part}"));
         }
 
         return Task.FromResult(handler.Solve());
