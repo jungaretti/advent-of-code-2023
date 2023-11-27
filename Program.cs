@@ -32,6 +32,7 @@ class Program
 
         var solver = new PuzzleSolver(new PuzzleHandler[]
         {
+            // Add all puzzle handlers here
             new Day00Part0(File.ReadAllLines("input/day00.txt")),
         });
         string answer = await solver.Solve(day, part);
