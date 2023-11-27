@@ -14,6 +14,6 @@ public class Day1Part1 : PuzzleHandler
 
     public override string Solve()
     {
-        return "42";
+        return Input.Count().ToString();
     }
 }
