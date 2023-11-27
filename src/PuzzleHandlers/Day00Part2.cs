@@ -1,7 +1,3 @@
-
-
-using System.Collections.Immutable;
-
 namespace advent_of_code_2023;
 
 public class Day00Part2 : PuzzleHandler

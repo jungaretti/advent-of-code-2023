@@ -1,5 +1,3 @@
-
-
 namespace advent_of_code_2023;
 
 public class Day00Part1 : PuzzleHandler
