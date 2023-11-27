@@ -25,12 +25,12 @@ class Program
         );
         rootCommand.AddArgument(partArgument);
 
-        rootCommand.SetHandler(RunPuzzle, dayArgument, partArgument);
+        rootCommand.SetHandler(PuzzleHandler, dayArgument, partArgument);
 
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task RunPuzzle(int day, int part)
+    private static async Task PuzzleHandler(int day, int part)
     {
         Console.WriteLine($"Day: {day}");
         Console.WriteLine($"Part: {part}");
