@@ -1,18 +1,17 @@
+namespace AdventOfCode.Puzzles;
 
-namespace AdventOfCode.Solvers;
-
-public class Day00Part2 : PuzzleSolver
+class Day00Part2Strategy : IPuzzleStrategy
 {
     public int Day => 0;
 
     public int Part => 2;
 
-    public Task<string> SolveAsync(IEnumerable<string> input)
+    public string SolvePuzzle(IEnumerable<string> inputLines)
     {
         var allCalories = new PriorityQueue<int, int>();
         var currentCalories = 0;
 
-        foreach (var line in input)
+        foreach (var line in inputLines)
         {
             var didParseCalories = int.TryParse(line, out var calories);
 
@@ -34,6 +33,6 @@ public class Day00Part2 : PuzzleSolver
         answer += allCalories.Dequeue();
         answer += allCalories.Dequeue();
 
-        return Task.FromResult(answer.ToString());
+        return answer.ToString();
     }
 }

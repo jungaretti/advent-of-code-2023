@@ -1,16 +1,10 @@
-using AdventOfCode.Solvers;
+using AdventOfCode.Puzzles;
 using System.CommandLine;
 
 namespace AdventOfCode.CLI;
 
 class Program
 {
-    private static IEnumerable<PuzzleSolver> puzzleSolvers = new PuzzleSolver[]
-    {
-        new Day00Part1(),
-        new Day00Part2(),
-    };
-
     static async Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand("Advent of Code 2023");
@@ -40,8 +34,8 @@ class Program
 
             var input = await File.ReadAllLinesAsync(inputFile);
 
-            var provider = new PuzzleProvider(puzzleSolvers);
-            var answer = await provider.SolveAsync(day, part, input);
+            var solver = new PuzzleSolver();
+            var answer = solver.SolvePuzzle(day, part, input);
 
             Console.WriteLine();
             Console.WriteLine($"Answer: {answer}");
