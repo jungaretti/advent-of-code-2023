@@ -31,13 +31,19 @@ class Program
         Console.WriteLine("Advent of Code 2023");
         Console.WriteLine($"Solving day {day} part {part}");
 
-        var solver = new PuzzleSolver(new PuzzleHandler[]
+        var puzzleInputs = new PuzzleInput[]
         {
-            // Add all puzzle handlers here
-            new Day00Part1(File.ReadAllLines("input/day00.txt")),
-            new Day00Part2(File.ReadAllLines("input/day00.txt")),
-        });
-        string answer = await solver.Solve(day, part);
+            new PuzzleInput(0, File.ReadAllLines("input/day00.txt")),
+        };
+
+        var puzzleSolvers = new PuzzleSolver[]
+        {
+            new Day00Part1(),
+            new Day00Part2(),
+        };
+
+        var provider = new PuzzleProvider(puzzleInputs, puzzleSolvers);
+        var answer = await provider.SolveAsync(day, part);
 
         Console.WriteLine();
         Console.WriteLine($"Answer: {answer}");

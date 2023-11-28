@@ -1,21 +1,18 @@
+
 namespace AdventOfCode.Solvers;
 
-public class Day00Part1 : PuzzleHandler
+public class Day00Part1 : PuzzleSolver
 {
-    public override int Day => 0;
+    public int Day => 0;
 
-    public override int Part => 1;
+    public int Part => 1;
 
-    public Day00Part1(IEnumerable<string> input) : base(input)
-    {
-    }
-
-    public override string Solve()
+    public Task<string> SolveAsync(PuzzleInput input)
     {
         var maxCalories = 0;
         var currentCalories = 0;
 
-        foreach (var line in Input)
+        foreach (var line in input.Input)
         {
             var didParseCalories = int.TryParse(line, out var calories);
 
@@ -33,6 +30,6 @@ public class Day00Part1 : PuzzleHandler
             }
         }
 
-        return maxCalories.ToString();
+        return Task.FromResult(maxCalories.ToString());
     }
 }
