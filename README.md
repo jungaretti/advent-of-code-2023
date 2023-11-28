@@ -5,7 +5,7 @@ My solutions for Advent of Code 2023.
 ## Usage
 
 ```bash
-dotnet run --project src/AdventOfCode.CLI -- <day> <part>
+dotnet run --project src/AdventOfCode.CLI -- <day> <part> <inputFile>
 ```
 
 ### Add a new puzzle handler

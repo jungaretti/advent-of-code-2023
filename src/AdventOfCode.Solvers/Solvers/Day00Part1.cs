@@ -7,12 +7,12 @@ public class Day00Part1 : PuzzleSolver
 
     public int Part => 1;
 
-    public Task<string> SolveAsync(PuzzleInput input)
+    public Task<string> SolveAsync(IEnumerable<string> input)
     {
         var maxCalories = 0;
         var currentCalories = 0;
 
-        foreach (var line in input.Input)
+        foreach (var line in input)
         {
             var didParseCalories = int.TryParse(line, out var calories);
 

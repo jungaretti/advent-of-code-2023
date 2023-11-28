@@ -21,15 +21,16 @@ class Program
         );
         rootCommand.AddArgument(partArgument);
 
-        rootCommand.SetHandler(async (day, part) =>
+        var inputFileArgument = new Argument<string>(
+            name: "inputFile",
+            description: "The input file to use."
+        );
+        rootCommand.AddArgument(inputFileArgument);
+
+        rootCommand.SetHandler(async (day, part, inputFile) =>
         {
             Console.WriteLine("Advent of Code 2023");
             Console.WriteLine($"Solving day {day} part {part}");
-
-            var puzzleInputs = new PuzzleInput[]
-            {
-                new PuzzleInput(0, File.ReadAllLines("input/day00.txt")),
-            };
 
             var puzzleSolvers = new PuzzleSolver[]
             {
@@ -37,12 +38,14 @@ class Program
                 new Day00Part2(),
             };
 
-            var provider = new PuzzleProvider(puzzleInputs, puzzleSolvers);
-            var answer = await provider.SolveAsync(day, part);
+            var input = await File.ReadAllLinesAsync(inputFile);
+
+            var provider = new PuzzleProvider(puzzleSolvers);
+            var answer = await provider.SolveAsync(day, part, input);
 
             Console.WriteLine();
             Console.WriteLine($"Answer: {answer}");
-        }, dayArgument, partArgument);
+        }, dayArgument, partArgument, inputFileArgument);
 
         return await rootCommand.InvokeAsync(args);
     }

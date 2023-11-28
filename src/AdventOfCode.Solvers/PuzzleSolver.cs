@@ -4,5 +4,5 @@ public interface PuzzleSolver
 
     int Part { get; }
 
-    Task<string> SolveAsync(PuzzleInput input);
+    Task<string> SolveAsync(IEnumerable<string> input);
 }
