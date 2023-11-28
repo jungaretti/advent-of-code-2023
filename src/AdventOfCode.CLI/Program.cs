@@ -5,6 +5,12 @@ namespace AdventOfCode.CLI;
 
 class Program
 {
+    private static IEnumerable<PuzzleSolver> puzzleSolvers = new PuzzleSolver[]
+    {
+        new Day00Part1(),
+        new Day00Part2(),
+    };
+
     static async Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand("Advent of Code 2023");
@@ -31,12 +37,6 @@ class Program
         {
             Console.WriteLine("Advent of Code 2023");
             Console.WriteLine($"Solving day {day} part {part}");
-
-            var puzzleSolvers = new PuzzleSolver[]
-            {
-                new Day00Part1(),
-                new Day00Part2(),
-            };
 
             var input = await File.ReadAllLinesAsync(inputFile);
 
