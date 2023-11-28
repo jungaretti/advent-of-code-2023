@@ -6,7 +6,7 @@ My solutions for Advent of Code 2023.
 
 ```bash
 dotnet restore
-dotnet run <day> <part>
+dotnet run --project src/AdventOfCode.CLI -- <day> <part>
 ```
 
 ### Add a new puzzle handler
