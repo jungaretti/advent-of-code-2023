@@ -8,7 +8,7 @@ My solutions for Advent of Code 2023.
 dotnet run --project src/AdventOfCode.CLI -- <day> <part> <inputFile>
 ```
 
-### Add a new puzzle handler
+## Add a New Solution
 
-1. Create a new handler class in `src/PuzzleHandlers` that extends `PuzzleHandler`
-2. Construct a new handler and add it to the array of handlers in `Program.cs`
+1. Create a new strategy class in `src/AdventOfCode.Puzzles/PuzzleStrategies` that implements `IPuzzleStrategy`
+2. Add the new strategy to `src/AdventOfCode.Puzzles/PuzzleSolver`'s default constructor
