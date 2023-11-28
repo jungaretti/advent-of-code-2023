@@ -20,7 +20,7 @@ public class PuzzleSolver
 
     public string SolvePuzzle(int day, int part, IEnumerable<string> inputLines)
     {
-        IPuzzleStrategy? strategy = strategies.FirstOrDefault(s => s.Day == day && s.Part == part);
+        IPuzzleStrategy? strategy = strategies.SingleOrDefault(s => s.Day == day && s.Part == part);
 
         if (strategy == default)
         {
