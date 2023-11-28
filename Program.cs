@@ -30,7 +30,7 @@ class Program
         Console.WriteLine("Advent of Code 2023");
         Console.WriteLine($"Solving day {day} part {part}");
 
-        var solver = new PuzzleSolver(new PuzzleHandler[]
+        var solver = new PuzzleProvider(new PuzzleSolver[]
         {
             // Add all puzzle handlers here
             new Day00Part1(File.ReadAllLines("input/day00.txt")),

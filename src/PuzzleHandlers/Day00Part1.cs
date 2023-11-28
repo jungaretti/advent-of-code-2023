@@ -1,6 +1,6 @@
 namespace advent_of_code_2023;
 
-public class Day00Part1 : PuzzleHandler
+public class Day00Part1 : PuzzleSolver
 {
     public override int Day => 0;
 

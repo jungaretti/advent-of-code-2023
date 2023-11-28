@@ -1,23 +1,17 @@
 namespace advent_of_code_2023;
 
-public class PuzzleSolver
+public abstract class PuzzleSolver
 {
-    private readonly IEnumerable<PuzzleHandler> handlers;
+    public abstract int Day { get; }
 
-    public PuzzleSolver(IEnumerable<PuzzleHandler> handlers)
+    public abstract int Part { get; }
+
+    public IEnumerable<string> Input { get; }
+
+    public PuzzleSolver(IEnumerable<string> input)
     {
-        this.handlers = handlers;
+        Input = input;
     }
 
-    public Task<string> Solve(int day, int part)
-    {
-        PuzzleHandler? handler = handlers.FirstOrDefault(h => h.Day == day && h.Part == part);
-
-        if (handler is null)
-        {
-            return Task.FromException<string>(new Exception($"No puzzle handler found for day {day} part {part}"));
-        }
-
-        return Task.FromResult(handler.Solve());
-    }
+    public abstract string Solve();
 }
