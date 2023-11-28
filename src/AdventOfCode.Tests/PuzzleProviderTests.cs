@@ -13,12 +13,12 @@ public class PuzzleProviderTests
 
         var input = new string[] { "test" };
 
-        var mockSolver = new Mock<IPuzzleStrategy>();
-        mockSolver.SetupGet(s => s.Day).Returns(MOCK_DAY);
-        mockSolver.SetupGet(s => s.Part).Returns(MOCK_PART);
-        mockSolver.Setup(s => s.SolvePuzzle(input)).Returns(MOCK_ANSWER);
+        var mockStrategy = new Mock<IPuzzleStrategy>();
+        mockStrategy.SetupGet(s => s.Day).Returns(MOCK_DAY);
+        mockStrategy.SetupGet(s => s.Part).Returns(MOCK_PART);
+        mockStrategy.Setup(s => s.SolvePuzzle(input)).Returns(MOCK_ANSWER);
 
-        var provider = new PuzzleSolver(new IPuzzleStrategy[] { mockSolver.Object });
+        var provider = new PuzzleSolver(new IPuzzleStrategy[] { mockStrategy.Object });
 
         var answer = provider.SolvePuzzle(MOCK_DAY, MOCK_PART, input);
         Assert.Equal(MOCK_ANSWER, answer);
