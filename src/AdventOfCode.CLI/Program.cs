@@ -30,14 +30,13 @@ class Program
         rootCommand.SetHandler(async (inputFile, day, part) =>
         {
             Console.WriteLine("Advent of Code 2023");
-            Console.WriteLine($"Solving day {day} part {part}");
+            Console.WriteLine($"Day {day} Part {part}");
 
             var input = await File.ReadAllLinesAsync(inputFile);
 
             var solver = new PuzzleSolver();
             var answer = solver.SolvePuzzle(day, part, input);
 
-            Console.WriteLine();
             Console.WriteLine($"Answer: {answer}");
         }, inputFileArgument, dayArgument, partArgument);
 
