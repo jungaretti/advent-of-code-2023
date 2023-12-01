@@ -26,6 +26,21 @@ class Day01 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        return "212489";
+        var inputLinesWithDigits = inputLines.Select(line =>
+        {
+            string newLine = line.Replace("one", "o1e");
+            newLine = newLine.Replace("two", "t2o");
+            newLine = newLine.Replace("three", "t3e");
+            newLine = newLine.Replace("four", "f4r");
+            newLine = newLine.Replace("five", "f5e");
+            newLine = newLine.Replace("six", "s6x");
+            newLine = newLine.Replace("seven", "s7n");
+            newLine = newLine.Replace("eight", "e8t");
+            newLine = newLine.Replace("nine", "n9e");
+
+            return newLine;
+        });
+
+        return PartOne(inputLinesWithDigits);
     }
 }
