@@ -2,31 +2,38 @@ namespace AdventOfCode.Puzzles;
 
 public class PuzzleSolver
 {
-    private readonly IEnumerable<IPuzzleStrategy> strategies;
+    private readonly IEnumerable<IPuzzleDay> days;
 
     public PuzzleSolver()
     {
-        strategies = new IPuzzleStrategy[]
+        days = new IPuzzleDay[]
         {
-            new Day00Part1Strategy(),
-            new Day00Part2Strategy(),
+            new Day01(),
         };
     }
 
-    public PuzzleSolver(IEnumerable<IPuzzleStrategy> strategies)
+    public PuzzleSolver(IEnumerable<IPuzzleDay> days)
     {
-        this.strategies = strategies;
+        this.days = days;
     }
 
     public string SolvePuzzle(int day, int part, IEnumerable<string> inputLines)
     {
-        IPuzzleStrategy? strategy = strategies.SingleOrDefault(s => s.Day == day && s.Part == part);
+        IPuzzleDay? puzzleDay = days.SingleOrDefault(s => s.Day == day);
 
-        if (strategy == default)
+        if (puzzleDay == default)
         {
-            throw new Exception($"No strategy found for day {day} part {part}");
+            throw new Exception($"Could not find solver for day {day}");
         }
 
-        return strategy.SolvePuzzle(inputLines);
+        switch (part)
+        {
+            case 1:
+                return puzzleDay.PartOne(inputLines);
+            case 2:
+                return puzzleDay.PartTwo(inputLines);
+            default:
+                throw new Exception($"Could not find solver for part {part}");
+        }
     }
 }
