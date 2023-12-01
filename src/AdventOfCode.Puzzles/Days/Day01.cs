@@ -9,9 +9,14 @@ class Day01 : IPuzzleDay
     {
         IEnumerable<int> calibrationValues = inputLines.Select(line =>
         {
-            var digits = line.Where(char.IsDigit);
-            var firstDigit = digits.First();
-            var lastDigit = digits.Last();
+            IEnumerable<char> digits = line.Where(char.IsDigit);
+
+            char firstDigit = digits.FirstOrDefault();
+            char lastDigit = digits.LastOrDefault();
+            if (firstDigit == default || lastDigit == default)
+            {
+                throw new ArgumentException($"No digits found in input line: {line}");
+            }
 
             return int.Parse($"{firstDigit}{lastDigit}");
         });
