@@ -9,6 +9,12 @@ class Program
     {
         var rootCommand = new RootCommand("Advent of Code 2023");
 
+        var inputFileArgument = new Argument<string>(
+            name: "inputFile",
+            description: "The input file to use."
+        );
+        rootCommand.AddArgument(inputFileArgument);
+
         var dayArgument = new Argument<int>(
             name: "day",
             description: "The day to run."
@@ -21,13 +27,7 @@ class Program
         );
         rootCommand.AddArgument(partArgument);
 
-        var inputFileArgument = new Argument<string>(
-            name: "inputFile",
-            description: "The input file to use."
-        );
-        rootCommand.AddArgument(inputFileArgument);
-
-        rootCommand.SetHandler(async (day, part, inputFile) =>
+        rootCommand.SetHandler(async (inputFile, day, part) =>
         {
             Console.WriteLine("Advent of Code 2023");
             Console.WriteLine($"Solving day {day} part {part}");
@@ -39,7 +39,7 @@ class Program
 
             Console.WriteLine();
             Console.WriteLine($"Answer: {answer}");
-        }, dayArgument, partArgument, inputFileArgument);
+        }, inputFileArgument, dayArgument, partArgument);
 
         return await rootCommand.InvokeAsync(args);
     }

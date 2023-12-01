@@ -5,7 +5,7 @@ My solutions for Advent of Code 2023.
 ## Usage
 
 ```bash
-dotnet run --project src/AdventOfCode.CLI -- <day> <part> <inputFile>
+dotnet run --project src/AdventOfCode.CLI -- <inputFile> <day> <part>
 ```
 
 ## Add a New Solution

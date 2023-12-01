@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/AdventOfCode.CLI/bin/Debug/net8.0/AdventOfCode.CLI.dll",
-            "args": ["${input:dayPrompt}", "${input:partPrompt}", "${input:inputFilePrompt}"],
+            "args": ["${input:inputFilePrompt}", "${input:dayPrompt}", "${input:partPrompt}"],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
