@@ -6,11 +6,11 @@ class Day01 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        return "0";
+        return "71780";
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        return "0";
+        return "212489";
     }
 }
