@@ -2,7 +2,7 @@ using AdventOfCode.Puzzles;
 
 namespace AdventOfCode.Tests;
 
-public class PuzzleSolverTests
+public class DayTests
 {
     [Fact]
     public void Day01Part1Test()
