@@ -7,7 +7,7 @@ class Day01 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        var calibrationValues = inputLines.Select(line =>
+        IEnumerable<int> calibrationValues = inputLines.Select(line =>
         {
             var digits = line.Where(char.IsDigit);
             var firstDigit = digits.First();
