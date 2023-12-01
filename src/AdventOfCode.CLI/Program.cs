@@ -25,7 +25,6 @@ class Program
             name: "part",
             description: "The part to run."
         );
-        partArgument.SetDefaultValue(1);
         rootCommand.AddArgument(partArgument);
 
         rootCommand.SetHandler(async (inputFile, day, part) =>
