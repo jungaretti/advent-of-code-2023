@@ -1,3 +1,4 @@
+using System.Text;
 using AdventOfCode.Puzzles;
 
 class Day01 : IPuzzleDay
@@ -6,7 +7,16 @@ class Day01 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        return "71780";
+        var calibrationValues = inputLines.Select(line =>
+        {
+            var digits = line.Where(char.IsDigit);
+            var firstDigit = digits.First();
+            var lastDigit = digits.Last();
+
+            return int.Parse($"{firstDigit}{lastDigit}");
+        });
+
+        return calibrationValues.Sum().ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
