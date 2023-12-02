@@ -1,4 +1,3 @@
-using System.Text;
 using AdventOfCode.Puzzles;
 
 class Day01 : IPuzzleDay
