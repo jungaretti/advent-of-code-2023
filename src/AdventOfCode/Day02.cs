@@ -8,7 +8,7 @@ class Day02 : IPuzzleDay
     {
         public int Id { get; }
 
-        public IEnumerable<IReadOnlyDictionary<string, int>> Rounds { get; }
+        public IEnumerable<IDictionary<string, int>> Rounds { get; }
 
         public GameResult(string gameLine)
         {
@@ -38,7 +38,7 @@ class Day02 : IPuzzleDay
             });
         }
 
-        public bool IsPossible(IReadOnlyDictionary<string, int> allowedColorCounts)
+        public bool IsPossible(IDictionary<string, int> allowedColorCounts)
         {
             foreach (var round in Rounds)
             {
