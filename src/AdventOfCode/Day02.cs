@@ -58,6 +58,22 @@ class Day02 : IPuzzleDay
 
             return true;
         }
+
+        public IDictionary<string, int> FewestColorCounts()
+        {
+            var fewestColorCounts = new Dictionary<string, int>();
+            foreach (var roundColorCounts in Rounds)
+            {
+                foreach (var cubeColor in roundColorCounts.Keys)
+                {
+                    var existingFewestCount = fewestColorCounts.GetValueOrDefault(cubeColor, 0);
+                    var newFewestCount = Math.Max(existingFewestCount, roundColorCounts[cubeColor]);
+                    fewestColorCounts[cubeColor] = newFewestCount;
+                }
+            }
+
+            return fewestColorCounts;
+        }
     }
 
     public int Day => 2;
@@ -74,11 +90,28 @@ class Day02 : IPuzzleDay
         };
         IEnumerable<GameResult> possibleResults = results.Where(result => result.IsPossible(allowedColorCounts));
 
-        return possibleResults.Select(result => result.Id).Sum().ToString();
+        var answer = possibleResults.Select(result => result.Id).Sum();
+        return answer.ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        IEnumerable<GameResult> results = inputLines.Select(line => new GameResult(line));
+
+        IEnumerable<IDictionary<string, int>> fewestColorCounts = results.Select(result => result.FewestColorCounts());
+
+        IEnumerable<int> powersOfFewestColorCounts = fewestColorCounts.Select(fewestColorCounts =>
+        {
+            int power = 1;
+            foreach (var colorCount in fewestColorCounts.Values)
+            {
+                power *= colorCount;
+            }
+
+            return power;
+        });
+
+        var answer = powersOfFewestColorCounts.Sum();
+        return answer.ToString();
     }
 }
