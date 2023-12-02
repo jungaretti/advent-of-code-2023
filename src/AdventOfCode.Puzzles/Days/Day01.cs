@@ -1,4 +1,4 @@
-using AdventOfCode.Puzzles;
+namespace AdventOfCode.Puzzles;
 
 class Day01 : IPuzzleDay
 {
