@@ -1,4 +1,4 @@
-namespace AdventOfCode.Puzzles;
+namespace AdventOfCode;
 
 public interface IPuzzleDay
 {

@@ -1,4 +1,4 @@
-using AdventOfCode.Puzzles;
+using AdventOfCode;
 using System.CommandLine;
 
 namespace AdventOfCode.CLI;

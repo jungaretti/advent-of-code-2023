@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.CLI", "src\Adv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Tests", "src\AdventOfCode.Tests\AdventOfCode.Tests.csproj", "{F27CF47B-5755-4418-B13A-7679D6F69D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Puzzles", "src\AdventOfCode.Puzzles\AdventOfCode.Puzzles.csproj", "{42F7103B-473B-4490-B67B-9E290D93DE12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode", "src\AdventOfCode\AdventOfCode.csproj", "{42F7103B-473B-4490-B67B-9E290D93DE12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

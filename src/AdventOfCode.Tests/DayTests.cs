@@ -1,4 +1,4 @@
-using AdventOfCode.Puzzles;
+using AdventOfCode;
 
 namespace AdventOfCode.Tests;
 

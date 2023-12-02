@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode.Puzzles;
+namespace AdventOfCode;
 
 class Day02 : IPuzzleDay
 {
