@@ -9,6 +9,7 @@ public class PuzzleSolver
         days = new IPuzzleDay[]
         {
             new Day01(),
+            new Day02(),
         };
     }
 
