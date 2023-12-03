@@ -69,4 +69,44 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(2, 2, inputLines);
         Assert.Equal("2286", answer);
     }
+
+    [Fact]
+    public void Day03Part1Test()
+    {
+        string[] inputLines = {
+            "467..114..",
+            "...*......",
+            "..35..633.",
+            "......#...",
+            "617*......",
+            ".....+.58.",
+            "..592.....",
+            "......755.",
+            "...$.*....",
+            ".664.598..",
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(3, 1, inputLines);
+        Assert.Equal("2286", answer);
+    }
+
+    [Fact]
+    public void Day03Part2Test()
+    {
+        string[] inputLines = {
+            "467..114..",
+            "...*......",
+            "..35..633.",
+            "......#...",
+            "617*......",
+            ".....+.58.",
+            "..592.....",
+            "......755.",
+            "...$.*....",
+            ".664.598..",
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(3, 2, inputLines);
+        Assert.Equal("2286", answer);
+    }
 }
