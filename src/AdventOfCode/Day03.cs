@@ -1,5 +1,4 @@
-
-using System.ComponentModel.Design;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AdventOfCode;
 
@@ -49,7 +48,8 @@ public class Day03 : IPuzzleDay
                 }
             }
 
-            var thing = "hello";
+            var someNode = nodes[1][1];
+            var neighbors = someNode.FindNeighbors(nodes);
         }
     }
 
@@ -62,6 +62,32 @@ public class Day03 : IPuzzleDay
         public EngineNode(EngineCell cell)
         {
             cells = new List<EngineCell> { cell };
+        }
+
+        public HashSet<EngineNode> FindNeighbors(EngineNode[][] allNodes)
+        {
+            var neighbors = new HashSet<EngineNode>();
+            foreach (var cell in cells)
+            {
+                foreach (var rowOffset in new int[] { -1, 0, 1 })
+                {
+                    foreach (var colOffset in new int[] { -1, 0, 1 })
+                    {
+                        EngineNode? adjacent = allNodes.ElementAtOrDefault(cell.Row + rowOffset)?.ElementAtOrDefault(cell.Column + colOffset);
+
+                        if (adjacent == default)
+                        {
+                            continue;
+                        }
+
+                        neighbors.Add(adjacent);
+                    }
+                }
+            }
+
+            neighbors.Remove(this);
+
+            return neighbors;
         }
     }
 
