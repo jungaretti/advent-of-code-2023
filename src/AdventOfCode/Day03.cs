@@ -9,8 +9,9 @@ public class Day03 : IPuzzleDay
     public string PartOne(IEnumerable<string> inputLines)
     {
         var engineGrid = new EngineGrid(inputLines);
+        var partNumbers = engineGrid.PartNumbers;
 
-        throw new NotImplementedException();
+        return partNumbers.Sum().ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
@@ -59,6 +60,29 @@ public class Day03 : IPuzzleDay
                 }
             }
         }
+
+        public IEnumerable<int> PartNumbers
+        {
+            get
+            {
+                HashSet<EngineNode> partNumberNodes = new HashSet<EngineNode>();
+                foreach (EngineNode[] row in nodeGrid)
+                {
+                    foreach (EngineNode node in row)
+                    {
+                        var neighbors = node.FindNeighbors(nodeGrid);
+                        var hasSymbolNeighbor = neighbors.Any(node => node.IsSymbol);
+
+                        if (node.IsNumber && hasSymbolNeighbor)
+                        {
+                            partNumberNodes.Add(node);
+                        }
+                    }
+                }
+
+                return partNumberNodes.Select(node => int.Parse(node.Value));
+            }
+        }
     }
 
     class EngineNode
@@ -68,6 +92,10 @@ public class Day03 : IPuzzleDay
         public string Value => new string(cells.Select(cell => cell.Value).ToArray());
 
         public bool IsNumber => int.TryParse(Value.ToArray(), out var _);
+
+        public bool IsPeriod => Value == ".";
+
+        public bool IsSymbol => !IsNumber && !IsPeriod;
 
         public EngineNode(EngineCell cell)
         {
