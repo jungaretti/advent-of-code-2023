@@ -9,7 +9,7 @@ public class Day03 : IPuzzleDay
     public string PartOne(IEnumerable<string> inputLines)
     {
         var engineGrid = new EngineGrid(inputLines);
-        var partNumbers = engineGrid.PartNumbers;
+        var partNumbers = engineGrid.PartNumbers();
 
         return partNumbers.Sum().ToString();
     }
@@ -17,7 +17,7 @@ public class Day03 : IPuzzleDay
     public string PartTwo(IEnumerable<string> inputLines)
     {
         var engineGrid = new EngineGrid(inputLines);
-        var gearRatios = engineGrid.GearRatios;
+        var gearRatios = engineGrid.GearRatios();
 
         return gearRatios.Sum().ToString();
     }
@@ -64,54 +64,47 @@ public class Day03 : IPuzzleDay
             }
         }
 
-        public IEnumerable<int> PartNumbers
+        public IEnumerable<int> PartNumbers()
         {
-            get
+            HashSet<EngineNode> partNumberNodes = new HashSet<EngineNode>();
+            foreach (EngineNode[] row in nodeGrid)
             {
-                HashSet<EngineNode> partNumberNodes = new HashSet<EngineNode>();
-                foreach (EngineNode[] row in nodeGrid)
+                foreach (EngineNode node in row)
                 {
-                    foreach (EngineNode node in row)
+                    if (node.IsPartNumber(nodeGrid))
                     {
-                        if (node.IsPartNumber(nodeGrid))
-                        {
-                            partNumberNodes.Add(node);
-                        }
+                        partNumberNodes.Add(node);
                     }
                 }
-
-                return partNumberNodes.Select(node => int.Parse(node.Value));
             }
+
+            return partNumberNodes.Select(node => int.Parse(node.Value));
         }
 
-        public IEnumerable<int> GearRatios
+        public IEnumerable<int> GearRatios()
         {
-            get
+            HashSet<EngineNode> gearNodes = new HashSet<EngineNode>();
+            foreach (EngineNode[] row in nodeGrid)
             {
-                HashSet<EngineNode> gearNodes = new HashSet<EngineNode>();
-                foreach (EngineNode[] row in nodeGrid)
+                foreach (EngineNode node in row)
                 {
-                    foreach (EngineNode node in row)
+                    if (node.IsGear(nodeGrid))
                     {
-                        if (node.IsGear(nodeGrid))
-                        {
-                            gearNodes.Add(node);
-                        }
+                        gearNodes.Add(node);
                     }
                 }
-
-                var gearRatios = gearNodes.Select(node =>
-                {
-                    var numberNeighbors = node.FindNeighbors(nodeGrid).Where(neighbor => neighbor.IsNumber);
-
-                    var firstGearValue = int.Parse(numberNeighbors.ElementAt(0).Value);
-                    var secondGearValue = int.Parse(numberNeighbors.ElementAt(1).Value);
-                    return firstGearValue * secondGearValue;
-                });
-
-                return gearRatios;
             }
 
+            var gearRatios = gearNodes.Select(node =>
+            {
+                var numberNeighbors = node.FindNeighbors(nodeGrid).Where(neighbor => neighbor.IsNumber);
+
+                var firstGearValue = int.Parse(numberNeighbors.ElementAt(0).Value);
+                var secondGearValue = int.Parse(numberNeighbors.ElementAt(1).Value);
+                return firstGearValue * secondGearValue;
+            });
+
+            return gearRatios;
         }
     }
 
