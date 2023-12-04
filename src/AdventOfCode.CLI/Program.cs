@@ -1,5 +1,6 @@
 using AdventOfCode;
 using System.CommandLine;
+using System.Diagnostics;
 
 namespace AdventOfCode.CLI;
 
@@ -32,12 +33,18 @@ class Program
             Console.WriteLine("Advent of Code 2023");
             Console.WriteLine($"Day {day} Part {part}");
 
-            var input = await File.ReadAllLinesAsync(inputFile);
+            IEnumerable<string> inputLines = await File.ReadAllLinesAsync(inputFile);
+            PuzzleSolver solver = new PuzzleSolver();
+            Stopwatch stopwatch = new Stopwatch();
 
-            var solver = new PuzzleSolver();
-            var answer = solver.SolvePuzzle(day, part, input);
+            stopwatch.Start();
+            var answer = solver.SolvePuzzle(day, part, inputLines);
+            stopwatch.Stop();
 
-            Console.WriteLine($"Answer: {answer}");
+            var elapsed = stopwatch.Elapsed;
+            var elapsedPretty = Math.Round(elapsed.TotalSeconds, 3);
+
+            Console.WriteLine($"Answer: {answer} ({elapsedPretty} seconds)");
         }, inputFileArgument, dayArgument, partArgument);
 
         return await rootCommand.InvokeAsync(args);
