@@ -211,6 +211,6 @@ public class DayTests
         };
 
         var answer = puzzleSolver.SolvePuzzle(4, 2, inputLines);
-        Assert.Equal("", answer);
+        Assert.Equal("30", answer);
     }
 }
