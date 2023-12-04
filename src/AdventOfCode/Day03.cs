@@ -48,6 +48,16 @@ public class Day03 : IPuzzleDay
                 }
             }
 
+            for (int rowIndex = 0; rowIndex < cellGrid.Length; rowIndex++)
+            {
+                EngineNode previousNode = nodes[rowIndex][0];
+                for (int colIndex = 1; colIndex < cellGrid[rowIndex].Length; colIndex++)
+                {
+                    EngineNode currentNode = nodes[rowIndex][colIndex];
+                    currentNode.MergeWith(previousNode, nodes);
+                }
+            }
+
             var someNode = nodes[1][1];
             var neighbors = someNode.FindNeighbors(nodes);
         }
@@ -55,7 +65,7 @@ public class Day03 : IPuzzleDay
 
     class EngineNode
     {
-        private readonly List<EngineCell> cells;
+        private List<EngineCell> cells;
 
         public string Value => new string(cells.Select(cell => cell.Value).ToArray());
 
@@ -88,6 +98,20 @@ public class Day03 : IPuzzleDay
             neighbors.Remove(this);
 
             return neighbors;
+        }
+
+        public void MergeWith(EngineNode leftNode, EngineNode[][] allNodes)
+        {
+            var newCells = leftNode.cells;
+            newCells.AddRange(cells);
+            newCells.Sort((leftCell, rightCell) => leftCell.Column.CompareTo(rightCell.Column));
+
+            foreach (var cell in newCells)
+            {
+                allNodes[cell.Row][cell.Column] = this;
+            }
+
+            cells = newCells;
         }
     }
 
