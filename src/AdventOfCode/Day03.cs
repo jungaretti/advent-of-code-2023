@@ -16,7 +16,10 @@ public class Day03 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        var engineGrid = new EngineGrid(inputLines);
+        var gearRatios = engineGrid.GearRatios;
+
+        return gearRatios.Sum().ToString();
     }
 
     class EngineGrid
@@ -79,6 +82,36 @@ public class Day03 : IPuzzleDay
 
                 return partNumberNodes.Select(node => int.Parse(node.Value));
             }
+        }
+
+        public IEnumerable<int> GearRatios
+        {
+            get
+            {
+                HashSet<EngineNode> gearNodes = new HashSet<EngineNode>();
+                foreach (EngineNode[] row in nodeGrid)
+                {
+                    foreach (EngineNode node in row)
+                    {
+                        if (node.IsGear(nodeGrid))
+                        {
+                            gearNodes.Add(node);
+                        }
+                    }
+                }
+
+                var gearRatios = gearNodes.Select(node =>
+                {
+                    var numberNeighbors = node.FindNeighbors(nodeGrid).Where(neighbor => neighbor.IsNumber);
+
+                    var firstGearValue = int.Parse(numberNeighbors.ElementAt(0).Value);
+                    var secondGearValue = int.Parse(numberNeighbors.ElementAt(1).Value);
+                    return firstGearValue * secondGearValue;
+                });
+
+                return gearRatios;
+            }
+
         }
     }
 
@@ -151,6 +184,14 @@ public class Day03 : IPuzzleDay
             var hasSymbolNeighbor = neighbors.Any(node => node.IsSymbol);
 
             return IsNumber && hasSymbolNeighbor;
+        }
+
+        public bool IsGear(EngineNode[][] allNodes)
+        {
+            var neighbors = FindNeighbors(allNodes);
+            var numberNeighborCount = neighbors.Count(neighbor => neighbor.IsNumber);
+
+            return Value == "*" && numberNeighborCount == 2;
         }
     }
 
