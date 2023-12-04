@@ -18,24 +18,22 @@ class Day04 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        IEnumerable<Card> cards = inputLines.Select(line => new Card(line));
-        Dictionary<int, Card> cardsById = cards.ToDictionary(card => card.Id);
+        IEnumerable<Card> originalCards = inputLines.Select(line => new Card(line));
 
-        Queue<Card> queue = new Queue<Card>(cardsById.Values);
-        int answer = queue.Count;
-
-        while (queue.TryDequeue(out var card))
+        var stackSizeById = new Dictionary<int, int>();
+        foreach (var card in originalCards.Reverse())
         {
-            foreach (int copyId in card.CopyIds())
-            {
-                Card copy = cardsById[copyId];
+            var currentStackSize = 1;
 
-                queue.Enqueue(copy);
-                answer++;
+            foreach (var copyId in card.CopyIds())
+            {
+                currentStackSize += stackSizeById[copyId];
             }
+
+            stackSizeById[card.Id] = currentStackSize;
         }
 
-        return answer.ToString();
+        return stackSizeById.Values.Sum().ToString();
     }
 
     class Card
