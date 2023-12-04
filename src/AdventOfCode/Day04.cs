@@ -18,7 +18,24 @@ class Day04 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        IEnumerable<Card> cards = inputLines.Select(line => new Card(line));
+        Dictionary<int, Card> cardsById = cards.ToDictionary(card => card.Id);
+
+        Queue<Card> queue = new Queue<Card>(cardsById.Values);
+        int answer = queue.Count;
+
+        while (queue.TryDequeue(out var card))
+        {
+            foreach (int copyId in card.CopyIds())
+            {
+                Card copy = cardsById[copyId];
+
+                queue.Enqueue(copy);
+                answer++;
+            }
+        }
+
+        return answer.ToString();
     }
 
     class Card
@@ -27,7 +44,7 @@ class Day04 : IPuzzleDay
 
         public IEnumerable<int> MatchingNumbers { get; }
 
-        private static readonly Regex cardRegex = new Regex(@"Card.+(\d+): (.+) \| (.+)", RegexOptions.Compiled);
+        private static readonly Regex cardRegex = new Regex(@"Card\s*(\d+): (.+) \| (.+)", RegexOptions.Compiled);
 
         public Card(string cardLine)
         {
@@ -55,6 +72,20 @@ class Day04 : IPuzzleDay
 
             var score = Math.Pow(2, count - 1);
             return Convert.ToInt32(score);
+        }
+
+        public IEnumerable<int> CopyIds()
+        {
+            var matchingCount = MatchingNumbers.Count();
+            var copyIds = new List<int>();
+
+            for (int idOffset = 1; idOffset <= matchingCount; idOffset++)
+            {
+                var copyId = Id + idOffset;
+                copyIds.Add(copyId);
+            }
+
+            return copyIds;
         }
     }
 }
