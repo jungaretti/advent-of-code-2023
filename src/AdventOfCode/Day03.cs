@@ -20,7 +20,7 @@ public class Day03 : IPuzzleDay
 
     class EngineGrid
     {
-        EngineNode[][] nodes;
+        EngineNode[][] nodeGrid;
 
         public EngineGrid(IEnumerable<string> inputLines)
         {
@@ -37,29 +37,26 @@ public class Day03 : IPuzzleDay
                 }
             }
 
-            nodes = new EngineNode[cellGrid.Length][];
+            nodeGrid = new EngineNode[cellGrid.Length][];
             for (int rowIndex = 0; rowIndex < cellGrid.Length; rowIndex++)
             {
-                nodes[rowIndex] = new EngineNode[cellGrid[rowIndex].Length];
+                nodeGrid[rowIndex] = new EngineNode[cellGrid[rowIndex].Length];
                 for (int colIndex = 0; colIndex < cellGrid[rowIndex].Length; colIndex++)
                 {
                     EngineCell engineCell = cellGrid[rowIndex][colIndex];
-                    nodes[rowIndex][colIndex] = new EngineNode(engineCell);
+                    nodeGrid[rowIndex][colIndex] = new EngineNode(engineCell);
                 }
             }
 
             for (int rowIndex = 0; rowIndex < cellGrid.Length; rowIndex++)
             {
-                EngineNode previousNode = nodes[rowIndex][0];
+                EngineNode previousNode = nodeGrid[rowIndex][0];
                 for (int colIndex = 1; colIndex < cellGrid[rowIndex].Length; colIndex++)
                 {
-                    EngineNode currentNode = nodes[rowIndex][colIndex];
-                    currentNode.MergeWith(previousNode, nodes);
+                    EngineNode currentNode = nodeGrid[rowIndex][colIndex];
+                    currentNode.MergeWith(previousNode, nodeGrid);
                 }
             }
-
-            var someNode = nodes[1][1];
-            var neighbors = someNode.FindNeighbors(nodes);
         }
     }
 
