@@ -87,7 +87,43 @@ public class DayTests
         };
 
         var answer = puzzleSolver.SolvePuzzle(3, 1, inputLines);
-        Assert.Equal("2286", answer);
+        Assert.Equal("4361", answer);
+
+        inputLines = [
+            "12.......*..",
+            "+.........34",
+            ".......-12..",
+            "..78........",
+            "..*....60...",
+            "78..........",
+            ".......23...",
+            "....90*12...",
+            "............",
+            "2.2......12.",
+            ".*.........*",
+            "1.1.......56",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(3, 1, inputLines);
+        Assert.Equal("413", answer);
+
+        inputLines = [
+            "12.......*..",
+            "+.........34",
+            ".......-12..",
+            "..78........",
+            "..*....60...",
+            "78.........9",
+            ".5.....23..$",
+            "8...90*12...",
+            "............",
+            "2.2......12.",
+            ".*.........*",
+            "1.1..503+.56",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(3, 1, inputLines);
+        Assert.Equal("925", answer);
     }
 
     [Fact]
@@ -107,6 +143,42 @@ public class DayTests
         };
 
         var answer = puzzleSolver.SolvePuzzle(3, 2, inputLines);
-        Assert.Equal("2286", answer);
+        Assert.Equal("", answer);
+
+        inputLines = [
+            "12.......*..",
+            "+.........34",
+            ".......-12..",
+            "..78........",
+            "..*....60...",
+            "78..........",
+            ".......23...",
+            "....90*12...",
+            "............",
+            "2.2......12.",
+            ".*.........*",
+            "1.1.......56",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(3, 2, inputLines);
+        Assert.Equal("6756", answer);
+
+        inputLines = [
+            "12.......*..",
+            "+.........34",
+            ".......-12..",
+            "..78........",
+            "..*....60...",
+            "78.........9",
+            ".5.....23..$",
+            "8...90*12...",
+            "............",
+            "2.2......12.",
+            ".*.........*",
+            "1.1..503+.56",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(3, 2, inputLines);
+        Assert.Equal("6756", answer);
     }
 }
