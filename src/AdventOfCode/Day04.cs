@@ -25,55 +25,36 @@ class Day04 : IPuzzleDay
     {
         public int Id { get; }
 
-        public IEnumerable<int> Wins => myNumbers.Where(currentNumber => goalNumbers.Contains(currentNumber));
+        public IEnumerable<int> MatchingNumbers { get; }
 
-        private readonly List<int> myNumbers;
-
-        private HashSet<int> goalNumbers { get; }
+        private static readonly Regex cardRegex = new Regex(@"Card.+(\d+): (.+) \| (.+)", RegexOptions.Compiled);
 
         public Card(string cardLine)
         {
-            var cardRegex = new Regex(@"Card.+(\d+): (.+) \| (.+)");
-            var cardMatch = cardRegex.Match(cardLine);
+            var match = cardRegex.Match(cardLine);
 
-            Id = int.Parse(cardMatch.Groups[1].Value);
+            Id = int.Parse(match.Groups[1].Value);
 
-            goalNumbers = new HashSet<int>();
-            foreach (var number in cardMatch.Groups[2].Value.Split(" "))
-            {
-                if (string.IsNullOrEmpty(number))
-                {
-                    continue;
-                }
-
-                goalNumbers.Add(int.Parse(number));
-            }
-
-            myNumbers = new List<int>();
-            foreach (var number in cardMatch.Groups[3].Value.Split())
-            {
-                if (string.IsNullOrEmpty(number))
-                {
-                    continue;
-                }
-
-                myNumbers.Add(int.Parse(number));
-            }
+            var goalNumbers = match.Groups[2].Value
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse);
+            var myNumbers = match.Groups[3].Value
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse);
+            MatchingNumbers = myNumbers.Where(number => goalNumbers.Contains(number));
         }
 
         public int Score()
         {
-            var winCount = Wins.Count();
+            var count = MatchingNumbers.Count();
 
-            if (winCount == 0)
+            if (count == 0)
             {
                 return 0;
             }
 
-            var rawScore = Math.Pow(2, winCount - 1);
-            int score = Convert.ToInt32(rawScore);
-
-            return score;
+            var score = Math.Pow(2, count - 1);
+            return Convert.ToInt32(score);
         }
     }
 }
