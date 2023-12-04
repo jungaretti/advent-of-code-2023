@@ -18,22 +18,21 @@ class Day04 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        IEnumerable<Card> originalCards = inputLines.Select(line => new Card(line));
+        IEnumerable<Card> cards = inputLines.Select(line => new Card(line));
 
-        var stackSizeById = new Dictionary<int, int>();
-        foreach (var card in originalCards.Reverse())
+        // Each card has a stack size. Its stack size is equivalent to the number of copies that it awards, plus one.
+        // Some card copies grant even more copies. For example, if a card awards 2 copies, and each of those copies
+        // awards 2 more copies, then the stack size of the original card is 7 (1 original, 2 copies, 4 subcopies).
+        Dictionary<int, int> cardIdToStackSize = new Dictionary<int, int>();
+
+        foreach (Card card in cards.Reverse())
         {
-            var currentStackSize = 1;
-
-            foreach (var copyId in card.CopyIds())
-            {
-                currentStackSize += stackSizeById[copyId];
-            }
-
-            stackSizeById[card.Id] = currentStackSize;
+            var subStackSizes = card.CopyIds().Select(copyId => cardIdToStackSize[copyId]);
+            var stackSize = subStackSizes.Sum() + 1;
+            cardIdToStackSize[card.Id] = stackSize;
         }
 
-        return stackSizeById.Values.Sum().ToString();
+        return cardIdToStackSize.Values.Sum().ToString();
     }
 
     class Card
