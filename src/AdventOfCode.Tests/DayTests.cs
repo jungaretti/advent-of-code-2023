@@ -143,7 +143,7 @@ public class DayTests
         };
 
         var answer = puzzleSolver.SolvePuzzle(3, 2, inputLines);
-        Assert.Equal("", answer);
+        Assert.Equal("467835", answer);
 
         inputLines = [
             "12.......*..",
