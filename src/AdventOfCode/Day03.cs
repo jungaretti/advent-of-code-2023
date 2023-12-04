@@ -55,6 +55,7 @@ public class Day03 : IPuzzleDay
                 {
                     EngineNode currentNode = nodeGrid[rowIndex][colIndex];
                     currentNode.MergeWith(previousNode, nodeGrid);
+                    previousNode = currentNode;
                 }
             }
         }
@@ -65,6 +66,8 @@ public class Day03 : IPuzzleDay
         private List<EngineCell> cells;
 
         public string Value => new string(cells.Select(cell => cell.Value).ToArray());
+
+        public bool IsNumber => int.TryParse(Value.ToArray(), out var _);
 
         public EngineNode(EngineCell cell)
         {
@@ -99,6 +102,12 @@ public class Day03 : IPuzzleDay
 
         public void MergeWith(EngineNode leftNode, EngineNode[][] allNodes)
         {
+            // Only numbers are allowed to merge
+            if (!IsNumber || !leftNode.IsNumber)
+            {
+                return;
+            }
+
             var newCells = leftNode.cells;
             newCells.AddRange(cells);
             newCells.Sort((leftCell, rightCell) => leftCell.Column.CompareTo(rightCell.Column));
