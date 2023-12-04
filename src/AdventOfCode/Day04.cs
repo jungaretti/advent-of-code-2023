@@ -25,11 +25,11 @@ class Day04 : IPuzzleDay
     {
         public int Id { get; }
 
-        public List<int> AllNumbers { get; }
+        public IEnumerable<int> Wins => myNumbers.Where(currentNumber => goalNumbers.Contains(currentNumber));
 
-        public HashSet<int> GoalNumbers { get; }
+        private readonly List<int> myNumbers;
 
-        public IEnumerable<int> WinNumbers => AllNumbers.Where(currentNumber => GoalNumbers.Contains(currentNumber));
+        private HashSet<int> goalNumbers { get; }
 
         public Card(string cardLine)
         {
@@ -38,7 +38,7 @@ class Day04 : IPuzzleDay
 
             Id = int.Parse(cardMatch.Groups[1].Value);
 
-            GoalNumbers = new HashSet<int>();
+            goalNumbers = new HashSet<int>();
             foreach (var number in cardMatch.Groups[2].Value.Split(" "))
             {
                 if (string.IsNullOrEmpty(number))
@@ -46,10 +46,10 @@ class Day04 : IPuzzleDay
                     continue;
                 }
 
-                GoalNumbers.Add(int.Parse(number));
+                goalNumbers.Add(int.Parse(number));
             }
 
-            AllNumbers = new List<int>();
+            myNumbers = new List<int>();
             foreach (var number in cardMatch.Groups[3].Value.Split())
             {
                 if (string.IsNullOrEmpty(number))
@@ -57,13 +57,13 @@ class Day04 : IPuzzleDay
                     continue;
                 }
 
-                AllNumbers.Add(int.Parse(number));
+                myNumbers.Add(int.Parse(number));
             }
         }
 
         public int Score()
         {
-            var winCount = WinNumbers.Count();
+            var winCount = Wins.Count();
 
             if (winCount == 0)
             {
