@@ -70,10 +70,7 @@ public class Day03 : IPuzzleDay
                 {
                     foreach (EngineNode node in row)
                     {
-                        var neighbors = node.FindNeighbors(nodeGrid);
-                        var hasSymbolNeighbor = neighbors.Any(node => node.IsSymbol);
-
-                        if (node.IsNumber && hasSymbolNeighbor)
+                        if (node.IsPartNumber(nodeGrid))
                         {
                             partNumberNodes.Add(node);
                         }
@@ -146,6 +143,14 @@ public class Day03 : IPuzzleDay
             }
 
             cells = newCells;
+        }
+
+        public bool IsPartNumber(EngineNode[][] allNodes)
+        {
+            var neighbors = FindNeighbors(allNodes);
+            var hasSymbolNeighbor = neighbors.Any(node => node.IsSymbol);
+
+            return IsNumber && hasSymbolNeighbor;
         }
     }
 
