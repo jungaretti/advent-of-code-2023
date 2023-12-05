@@ -96,27 +96,25 @@ class Day05 : IPuzzleDay
 
     class AlmanacEdge
     {
-        private long sourceBase;
-        private long sourceLessThan;
-        private long destinationBase;
-        private long destinationLessThan;
+        private AlmanacRange sourceRange;
+        private AlmanacRange destinationRange;
 
         public AlmanacEdge(string edgeLine)
         {
             var regex = new Regex(@"(\d+)\s+(\d+)\s+(\d+)");
             var match = regex.Match(edgeLine);
 
-            sourceBase = long.Parse(match.Groups[2].Value);
-            destinationBase = long.Parse(match.Groups[1].Value);
-
+            var sourceBase = long.Parse(match.Groups[2].Value);
+            var destinationBase = long.Parse(match.Groups[1].Value);
             var range = long.Parse(match.Groups[3].Value);
-            sourceLessThan = sourceBase + range;
-            destinationLessThan = destinationBase + range;
+
+            sourceRange = new AlmanacRange(sourceBase, range);
+            destinationRange = new AlmanacRange(destinationBase, range);
         }
 
-        public bool SourceContains(long maybeSource) => maybeSource >= sourceBase && maybeSource < sourceLessThan;
+        public bool SourceContains(long maybeSource) => sourceRange.Contains(maybeSource);
 
-        public bool DestinationContains(long maybeDestination) => maybeDestination >= destinationBase && maybeDestination < destinationLessThan;
+        public bool DestinationContains(long maybeDestination) => destinationRange.Contains(maybeDestination);
 
         public long? Convert(long source)
         {
@@ -125,8 +123,26 @@ class Day05 : IPuzzleDay
                 return null;
             }
 
-            var offset = source - sourceBase;
-            return destinationBase + offset;
+            var offset = source - sourceRange.MinValue;
+            return destinationRange.MinValue + offset;
         }
+    }
+
+    class AlmanacRange
+    {
+        private long greaterThanOrEqualTo;
+        private long lessThan;
+
+        public AlmanacRange(long greaterThanOrEqualTo, long length)
+        {
+            this.greaterThanOrEqualTo = greaterThanOrEqualTo;
+            this.lessThan = greaterThanOrEqualTo + length;
+        }
+
+        public long MinValue => greaterThanOrEqualTo;
+
+        public long MaxValue => lessThan - 1;
+
+        public bool Contains(long value) => value >= greaterThanOrEqualTo && value < lessThan;
     }
 }
