@@ -66,13 +66,13 @@ class Day05 : IPuzzleDay
 
         public Almanac(IEnumerable<string> inputLines)
         {
-            var seedToSoilLines = GetMapLines(inputLines, "seed-to-soil");
-            var soilToFertilizerLines = GetMapLines(inputLines, "soil-to-fertilizer");
-            var fertilizerToWaterLines = GetMapLines(inputLines, "fertilizer-to-water");
-            var waterToLightLines = GetMapLines(inputLines, "water-to-light");
-            var lightToTemperatureLines = GetMapLines(inputLines, "light-to-temperature");
-            var temperatureToHumidityLines = GetMapLines(inputLines, "temperature-to-humidity");
-            var humidityToLocationLines = GetMapLines(inputLines, "humidity-to-location");
+            var seedToSoilLines = LinesForMap(inputLines, "seed-to-soil");
+            var soilToFertilizerLines = LinesForMap(inputLines, "soil-to-fertilizer");
+            var fertilizerToWaterLines = LinesForMap(inputLines, "fertilizer-to-water");
+            var waterToLightLines = LinesForMap(inputLines, "water-to-light");
+            var lightToTemperatureLines = LinesForMap(inputLines, "light-to-temperature");
+            var temperatureToHumidityLines = LinesForMap(inputLines, "temperature-to-humidity");
+            var humidityToLocationLines = LinesForMap(inputLines, "humidity-to-location");
 
             seedToSoil = new AlmanacMap(seedToSoilLines);
             soilToFertilizer = new AlmanacMap(soilToFertilizerLines);
@@ -85,18 +85,18 @@ class Day05 : IPuzzleDay
 
         public long ConvertSeedToLocation(long seed)
         {
-            var soil = seedToSoil.Convert(seed);
-            var fertilizer = soilToFertilizer.Convert(soil);
-            var water = fertilizerToWater.Convert(fertilizer);
-            var light = waterToLight.Convert(water);
-            var temperature = lightToTemperature.Convert(light);
-            var humidity = temperatureToHumidity.Convert(temperature);
-            var location = humidityToLocation.Convert(humidity);
+            var soil = seedToSoil.ConvertToDestination(seed);
+            var fertilizer = soilToFertilizer.ConvertToDestination(soil);
+            var water = fertilizerToWater.ConvertToDestination(fertilizer);
+            var light = waterToLight.ConvertToDestination(water);
+            var temperature = lightToTemperature.ConvertToDestination(light);
+            var humidity = temperatureToHumidity.ConvertToDestination(temperature);
+            var location = humidityToLocation.ConvertToDestination(humidity);
 
             return location;
         }
 
-        private IEnumerable<string> GetMapLines(IEnumerable<string> inputLines, string mapName)
+        private IEnumerable<string> LinesForMap(IEnumerable<string> inputLines, string mapName)
         {
             return inputLines
                 .SkipWhile(line => !line.StartsWith(mapName))
@@ -114,10 +114,10 @@ class Day05 : IPuzzleDay
             edges = edgeLines.Select(line => new AlmanacEdge(line));
         }
 
-        public long Convert(long source)
+        public long ConvertToDestination(long source)
         {
             var edge = edges.SingleOrDefault(edge => edge.SourceContains(source));
-            var conversion = edge?.Convert(source);
+            var conversion = edge?.ConvertToDestination(source);
 
             return conversion ?? source;
         }
@@ -145,7 +145,7 @@ class Day05 : IPuzzleDay
 
         public bool DestinationContains(long maybeDestination) => destinationRange.Contains(maybeDestination);
 
-        public long? Convert(long source)
+        public long? ConvertToDestination(long source)
         {
             if (!SourceContains(source))
             {
