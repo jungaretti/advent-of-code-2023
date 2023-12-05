@@ -213,4 +213,24 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(4, 2, inputLines);
         Assert.Equal("30", answer);
     }
+
+    [Fact]
+    public void Day05Part1Test()
+    {
+        string[] inputLines = {
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(5, 1, inputLines);
+        Assert.Equal("", answer);
+    }
+
+    [Fact]
+    public void Day05Part2Test()
+    {
+        string[] inputLines = {
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(5, 2, inputLines);
+        Assert.Equal("", answer);
+    }
 }
