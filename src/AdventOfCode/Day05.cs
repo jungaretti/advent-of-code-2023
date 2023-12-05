@@ -22,11 +22,34 @@ class Day05 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
+        const long SUBRANGE_LENGTH = 10_000;
+
         var seedsLine = inputLines.First();
         var seedStrings = seedsLine.Remove(0, "seeds: ".Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
-        var goalSeedRanges = ParseSeedRanges(seedStrings);
 
-        throw new Exception();
+        var almanac = new Almanac(inputLines);
+        IEnumerable<AlmanacRange> seedRanges = ParseSeedRanges(seedStrings);
+        IEnumerable<AlmanacRange> seedSubranges = seedRanges.SelectMany(range => range.SplitWithLength(SUBRANGE_LENGTH));
+
+        AlmanacRange subrangeWithMinLocation = seedSubranges.OrderBy(subrange =>
+        {
+            long minSeedLocation = almanac.ConvertSeedToLocation(subrange.MinValue);
+            long maxSeedLocation = almanac.ConvertSeedToLocation(subrange.MaxValue);
+            return Math.Min(minSeedLocation, maxSeedLocation);
+        }).First();
+
+        long answer = long.MaxValue;
+        for (long seed = subrangeWithMinLocation.MinValue; seed <= subrangeWithMinLocation.MaxValue; seed++)
+        {
+            long location = almanac.ConvertSeedToLocation(seed);
+            if (location < answer)
+            {
+                Console.WriteLine($"Found new minimum location: {location}");
+                answer = location;
+            }
+        }
+
+        return answer.ToString();
     }
 
     private IEnumerable<AlmanacRange> ParseSeedRanges(IEnumerable<string> seedStrings)
