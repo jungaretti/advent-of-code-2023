@@ -38,7 +38,9 @@ class Day05 : IPuzzleDay
             return Math.Min(minSeedLocation, maxSeedLocation);
         }).First();
 
-        long answer = long.MaxValue;
+        long answer = almanac.ConvertSeedToLocation(subrangeWithMinLocation.MinValue);
+        Console.WriteLine($"Seeded minimum location: {answer}");
+
         for (long seed = subrangeWithMinLocation.MinValue; seed <= subrangeWithMinLocation.MaxValue; seed++)
         {
             long location = almanac.ConvertSeedToLocation(seed);
