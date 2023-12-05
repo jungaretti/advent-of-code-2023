@@ -22,7 +22,7 @@ class Day05 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        const long SUBRANGE_LENGTH = 10_000;
+        const long SUBRANGE_LENGTH = 100_000;
 
         var seedsLine = inputLines.First();
         var seedStrings = seedsLine.Remove(0, "seeds: ".Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
