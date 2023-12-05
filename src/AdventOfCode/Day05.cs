@@ -1,5 +1,4 @@
 
-using System.Data;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
@@ -23,42 +22,7 @@ class Day05 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        var seedsLine = inputLines.First();
-        var seedStrings = seedsLine.Remove(0, "seeds: ".Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-        IEnumerable<long> goalSeeds = new List<long>();
-        long? seedBase = null;
-        long? seedLessThan = null;
-        foreach (string token in seedStrings)
-        {
-            if (seedBase is null)
-            {
-                seedBase = long.Parse(token);
-                continue;
-            }
-
-            if (seedLessThan is null)
-            {
-                seedLessThan = seedBase + long.Parse(token);
-                continue;
-            }
-
-            // Ready to add a range to goalSeeds
-            while (seedBase < seedLessThan)
-            {
-                goalSeeds = goalSeeds.Append(seedBase.Value);
-                seedBase++;
-            }
-
-            seedBase = null;
-            seedLessThan = null;
-        }
-
-        var almanac = new Almanac(inputLines);
-        var goalLocations = goalSeeds.Select(almanac.ConvertSeedToLocation);
-
-        var answer = goalLocations.Min();
-        return answer.ToString();
+        throw new NotImplementedException();
     }
 
     class Almanac
@@ -92,29 +56,15 @@ class Day05 : IPuzzleDay
 
         public long ConvertSeedToLocation(long seed)
         {
-            var soil = seedToSoil.DestinationOf(seed);
-            var fertilizer = soilToFertilizer.DestinationOf(soil);
-            var water = fertilizerToWater.DestinationOf(fertilizer);
-            var light = waterToLight.DestinationOf(water);
-            var temperature = lightToTemperature.DestinationOf(light);
-            var humidity = temperatureToHumidity.DestinationOf(temperature);
-            var location = humidityToLocation.DestinationOf(humidity);
+            var soil = seedToSoil.Convert(seed);
+            var fertilizer = soilToFertilizer.Convert(soil);
+            var water = fertilizerToWater.Convert(fertilizer);
+            var light = waterToLight.Convert(water);
+            var temperature = lightToTemperature.Convert(light);
+            var humidity = temperatureToHumidity.Convert(temperature);
+            var location = humidityToLocation.Convert(humidity);
 
             return location;
-        }
-
-        public long SeedAtMinLocation()
-        {
-            var minLocation = humidityToLocation.MinDestination;
-            var humidity = humidityToLocation.SourceOf(minLocation);
-            var temperature = temperatureToHumidity.SourceOf(humidity);
-            var light = lightToTemperature.SourceOf(temperature);
-            var water = waterToLight.SourceOf(light);
-            var fertilizer = fertilizerToWater.SourceOf(water);
-            var soil = soilToFertilizer.SourceOf(fertilizer);
-            var seed = seedToSoil.SourceOf(soil);
-
-            return seed;
         }
 
         private IEnumerable<string> GetMapLines(IEnumerable<string> inputLines, string mapName)
@@ -130,27 +80,17 @@ class Day05 : IPuzzleDay
     {
         private IEnumerable<AlmanacEdge> edges;
 
-        public long MinDestination => edges.Min(edge => edge.MinDestination);
-
         public AlmanacMap(IEnumerable<string> edgeLines)
         {
             edges = edgeLines.Select(line => new AlmanacEdge(line));
         }
 
-        public long DestinationOf(long source)
+        public long Convert(long source)
         {
             var edge = edges.SingleOrDefault(edge => edge.SourceContains(source));
-            var destination = edge?.DestinationOf(source);
+            var conversion = edge?.Convert(source);
 
-            return destination ?? source;
-        }
-
-        public long SourceOf(long destination)
-        {
-            var edge = edges.Single(edge => edge.DestinationContains(destination));
-            long source = edge.SourceOf(destination);
-
-            return source;
+            return conversion ?? source;
         }
     }
 
@@ -160,8 +100,6 @@ class Day05 : IPuzzleDay
         private long sourceLessThan;
         private long destinationBase;
         private long destinationLessThan;
-
-        public long MinDestination => destinationBase;
 
         public AlmanacEdge(string edgeLine)
         {
@@ -180,7 +118,7 @@ class Day05 : IPuzzleDay
 
         public bool DestinationContains(long maybeDestination) => maybeDestination >= destinationBase && maybeDestination < destinationLessThan;
 
-        public long? DestinationOf(long source)
+        public long? Convert(long source)
         {
             if (!SourceContains(source))
             {
@@ -189,12 +127,6 @@ class Day05 : IPuzzleDay
 
             var offset = source - sourceBase;
             return destinationBase + offset;
-        }
-
-        public long SourceOf(long destination)
-        {
-            var offset = destination - destinationBase;
-            return sourceBase + offset;
         }
     }
 }
