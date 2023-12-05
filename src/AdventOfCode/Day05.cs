@@ -22,7 +22,36 @@ class Day05 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        var seedsLine = inputLines.First();
+        var seedStrings = seedsLine.Remove(0, "seeds: ".Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        var goalSeedRanges = ParseSeedRanges(seedStrings);
+
+        throw new Exception();
+    }
+
+    private IEnumerable<AlmanacRange> ParseSeedRanges(IEnumerable<string> seedStrings)
+    {
+        long? seedBase = null;
+        long? seedRange = null;
+
+        foreach (string seedString in seedStrings)
+        {
+            if (seedBase == null)
+            {
+                seedBase = long.Parse(seedString);
+                continue;
+            }
+
+            if (seedRange == null)
+            {
+                seedRange = long.Parse(seedString);
+            }
+
+            yield return new AlmanacRange(seedBase.Value, seedRange.Value);
+
+            seedBase = null;
+            seedRange = null;
+        }
     }
 
     class Almanac
