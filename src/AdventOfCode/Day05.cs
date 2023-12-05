@@ -173,5 +173,24 @@ class Day05 : IPuzzleDay
         public long MaxValue => lessThan - 1;
 
         public bool Contains(long value) => value >= greaterThanOrEqualTo && value < lessThan;
+
+        public IEnumerable<AlmanacRange> SplitWithLength(long length)
+        {
+            long subrangeGreaterThanOrEqualTo = greaterThanOrEqualTo;
+            long subrangeLessThan = greaterThanOrEqualTo + length;
+
+            while (subrangeLessThan <= lessThan)
+            {
+                yield return new AlmanacRange(subrangeGreaterThanOrEqualTo, length);
+
+                subrangeGreaterThanOrEqualTo += length;
+                subrangeLessThan += length;
+            }
+
+            if (subrangeGreaterThanOrEqualTo < lessThan)
+            {
+                yield return new AlmanacRange(subrangeGreaterThanOrEqualTo, lessThan - subrangeGreaterThanOrEqualTo);
+            }
+        }
     }
 }
