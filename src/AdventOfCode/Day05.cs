@@ -22,21 +22,41 @@ class Day05 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        const long SUBRANGE_LENGTH = 60_000;
-
         var seedsLine = inputLines.First();
         var seedStrings = seedsLine.Remove(0, "seeds: ".Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
         var almanac = new Almanac(inputLines);
         IEnumerable<AlmanacRange> seedRanges = ParseSeedRanges(seedStrings);
-        IEnumerable<AlmanacRange> seedSubranges = seedRanges.SelectMany(range => range.SplitWithLength(SUBRANGE_LENGTH));
 
+        // First pass: split seed ranges into subranges of 10,000,000 seeds or less.
+        IEnumerable<AlmanacRange> seedSubranges = seedRanges.SelectMany(range => range.SplitWithLength(10_000_000));
         AlmanacRange subrangeWithMinLocation = seedSubranges.OrderBy(subrange =>
         {
             long minSeedLocation = almanac.ConvertSeedToLocation(subrange.MinValue);
             long maxSeedLocation = almanac.ConvertSeedToLocation(subrange.MaxValue);
             return Math.Min(minSeedLocation, maxSeedLocation);
         }).First();
+        Console.WriteLine($"Narrowed search: seed {subrangeWithMinLocation.MinValue} to {subrangeWithMinLocation.MaxValue}");
+
+        // Second pass: split the subrange with the minimum location into subranges of 100,000 seeds or less.
+        seedSubranges = subrangeWithMinLocation.SplitWithLength(100_000);
+        subrangeWithMinLocation = seedSubranges.OrderBy(subrange =>
+        {
+            long minSeedLocation = almanac.ConvertSeedToLocation(subrange.MinValue);
+            long maxSeedLocation = almanac.ConvertSeedToLocation(subrange.MaxValue);
+            return Math.Min(minSeedLocation, maxSeedLocation);
+        }).First();
+        Console.WriteLine($"Narrowed search: seed {subrangeWithMinLocation.MinValue} to {subrangeWithMinLocation.MaxValue}");
+
+        // Third pass: split the subrange with the minimum location into subranges of 1,000 seeds or less.
+        seedSubranges = subrangeWithMinLocation.SplitWithLength(1_000);
+        subrangeWithMinLocation = seedSubranges.OrderBy(subrange =>
+        {
+            long minSeedLocation = almanac.ConvertSeedToLocation(subrange.MinValue);
+            long maxSeedLocation = almanac.ConvertSeedToLocation(subrange.MaxValue);
+            return Math.Min(minSeedLocation, maxSeedLocation);
+        }).First();
+        Console.WriteLine($"Narrowed search: seed {subrangeWithMinLocation.MinValue} to {subrangeWithMinLocation.MaxValue}");
 
         long answer = almanac.ConvertSeedToLocation(subrangeWithMinLocation.MinValue);
         Console.WriteLine($"Seeded minimum location: {answer}");
