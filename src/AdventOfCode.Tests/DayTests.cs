@@ -311,4 +311,16 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(6, 1, inputLines);
         Assert.Equal("288", answer);
     }
+
+    [Fact]
+    public void Day06Part2Test()
+    {
+        string[] inputLines = {
+            "Time:      7  15   30",
+            "Distance:  9  40  200",
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(6, 2, inputLines);
+        Assert.Equal("71503", answer);
+    }
 }
