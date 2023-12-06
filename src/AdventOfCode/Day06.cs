@@ -1,6 +1,3 @@
-
-using System.Data.SqlTypes;
-
 namespace AdventOfCode;
 
 class Day06 : IPuzzleDay
@@ -11,7 +8,9 @@ class Day06 : IPuzzleDay
     {
         IEnumerable<Race> races = Race.ParseRaces(inputLines);
 
-        var answer = races.Count();
+        IEnumerable<int> winningButtonHoldTimesCount = races.Select(race => race.GetWinningButtonHoldTimes().Count());
+
+        int answer = winningButtonHoldTimesCount.Aggregate(1, (acc, count) => acc * count);
         return answer.ToString();
     }
 
@@ -23,12 +22,12 @@ class Day06 : IPuzzleDay
     class Race
     {
         public int Time { get; }
-        public int Distance { get; }
+        public int RecordDistance { get; }
 
         public Race(int time, int distance)
         {
             Time = time;
-            Distance = distance;
+            RecordDistance = distance;
         }
 
         static public IEnumerable<Race> ParseRaces(IEnumerable<string> inputLines)
@@ -43,6 +42,22 @@ class Day06 : IPuzzleDay
             IEnumerable<string> distances = distanceLine.Substring(DISTANCE_PREFIX.Length).Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             return times.Zip(distances, (time, distance) => new Race(int.Parse(time), int.Parse(distance)));
+        }
+
+        public IEnumerable<int> GetWinningButtonHoldTimes(int startingSpeed = 0, int acceleration = 1)
+        {
+            for (int holdButtonForTime = 0; holdButtonForTime < Time; holdButtonForTime++)
+            {
+                int boatSpeed = startingSpeed + (acceleration * holdButtonForTime);
+                int remainingTime = Time - holdButtonForTime;
+
+                int distance = boatSpeed * remainingTime;
+
+                if (distance > RecordDistance)
+                {
+                    yield return distance;
+                }
+            }
         }
     }
 }
