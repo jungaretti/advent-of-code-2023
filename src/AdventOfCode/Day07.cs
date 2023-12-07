@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
@@ -10,17 +11,9 @@ class Day07 : IPuzzleDay
     {
         IEnumerable<Hand> hands = inputLines.Select(line => new Hand(line));
 
-        List<Hand> sortedHands = hands.ToList();
-        sortedHands.Sort();
-
-        int answer = 0;
-        int rank = 1;
-        foreach (Hand hand in sortedHands)
-        {
-            var bidTimesRank = hand.Bid * rank;
-            answer += bidTimesRank;
-            rank++;
-        }
+        IEnumerable<Hand> sortedHands = hands.Order();
+        IEnumerable<int> winnings = sortedHands.Zip(Enumerable.Range(1, int.MaxValue), (hand, rank) => hand.Bid * rank);
+        int answer = winnings.Sum();
 
         return answer.ToString();
     }
@@ -48,38 +41,7 @@ class Day07 : IPuzzleDay
             Bid = bid;
         }
 
-        private HandType GetHandType()
-        {
-            var cardCounts = GetCardCounts();
-
-            if (cardCounts.Values.Any(count => count == 5))
-            {
-                return HandType.FiveOfAKind;
-            }
-            if (cardCounts.Values.Any(count => count == 4))
-            {
-                return HandType.FourOfAKind;
-            }
-            if (cardCounts.Values.Any(count => count == 3) && cardCounts.Values.Any(count => count == 2))
-            {
-                return HandType.FullHouse;
-            }
-            if (cardCounts.Values.Any(count => count == 3))
-            {
-                return HandType.ThreeOfAKind;
-            }
-            if (cardCounts.Values.Where(count => count == 2).Count() == 2)
-            {
-                return HandType.TwoPair;
-            }
-            if (cardCounts.Values.Where(count => count == 2).Count() == 1)
-            {
-                return HandType.OnePair;
-            }
-            return HandType.HighCard;
-        }
-
-        private IDictionary<char, int> GetCardCounts()
+        private int GetValue()
         {
             var cardCounts = new Dictionary<char, int>();
             foreach (Card card in Cards)
@@ -87,12 +49,45 @@ class Day07 : IPuzzleDay
                 var newCount = cardCounts.GetValueOrDefault(card.Label, 0) + 1;
                 cardCounts[card.Label] = newCount;
             }
-            return cardCounts;
+
+            if (cardCounts.Values.Any(count => count == 5))
+            {
+                // Five of a kind
+                return 500;
+            }
+            if (cardCounts.Values.Any(count => count == 4))
+            {
+                // Four of a kind
+                return 400;
+            }
+            if (cardCounts.Values.Any(count => count == 3) && cardCounts.Values.Any(count => count == 2))
+            {
+                // Full house
+                return 350;
+            }
+            if (cardCounts.Values.Any(count => count == 3))
+            {
+                // Three of a kind
+                return 300;
+            }
+            if (cardCounts.Values.Where(count => count == 2).Count() == 2)
+            {
+                // Two pair
+                return 200;
+            }
+            if (cardCounts.Values.Where(count => count == 2).Count() == 1)
+            {
+                // One pair
+                return 100;
+            }
+
+            // High card
+            return 1;
         }
 
         public int CompareTo(Hand? other)
         {
-            int typeCompare = GetHandType().CompareTo(other?.GetHandType());
+            int typeCompare = GetValue().CompareTo(other?.GetValue());
             if (typeCompare != 0)
             {
                 return typeCompare;
@@ -111,18 +106,7 @@ class Day07 : IPuzzleDay
         }
     }
 
-    enum HandType
-    {
-        FiveOfAKind = 500,
-        FourOfAKind = 400,
-        FullHouse = 350,
-        ThreeOfAKind = 300,
-        TwoPair = 200,
-        OnePair = 100,
-        HighCard = 10,
-    }
-
-    class Card : IComparable<Card>, IEquatable<Card>
+    class Card : IComparable<Card>
     {
         public char Label { get; }
 
@@ -147,11 +131,6 @@ class Day07 : IPuzzleDay
         public int CompareTo(Card? other)
         {
             return GetValue().CompareTo(other?.GetValue());
-        }
-
-        public bool Equals(Card? other)
-        {
-            return Label == other?.Label;
         }
     }
 }
