@@ -41,7 +41,7 @@ class Day07 : IPuzzleDay
             Bid = bid;
         }
 
-        private int GetValue()
+        private HandType GetHandType()
         {
             var cardCounts = new Dictionary<char, int>();
             foreach (Card card in Cards)
@@ -52,42 +52,35 @@ class Day07 : IPuzzleDay
 
             if (cardCounts.Values.Any(count => count == 5))
             {
-                // Five of a kind
-                return 500;
+                return HandType.FiveOfAKind;
             }
             if (cardCounts.Values.Any(count => count == 4))
             {
-                // Four of a kind
-                return 400;
+                return HandType.FourOfAKind;
             }
             if (cardCounts.Values.Any(count => count == 3) && cardCounts.Values.Any(count => count == 2))
             {
-                // Full house
-                return 350;
+                return HandType.FullHouse;
             }
             if (cardCounts.Values.Any(count => count == 3))
             {
-                // Three of a kind
-                return 300;
+                return HandType.ThreeOfAKind;
             }
             if (cardCounts.Values.Where(count => count == 2).Count() == 2)
             {
-                // Two pair
-                return 200;
+                return HandType.TwoPair;
             }
             if (cardCounts.Values.Where(count => count == 2).Count() == 1)
             {
-                // One pair
-                return 100;
+                return HandType.OnePair;
             }
 
-            // High card
-            return 1;
+            return HandType.HighCard;
         }
 
         public int CompareTo(Hand? other)
         {
-            int typeCompare = GetValue().CompareTo(other?.GetValue());
+            int typeCompare = GetHandType().CompareTo(other?.GetHandType());
             if (typeCompare != 0)
             {
                 return typeCompare;
@@ -104,6 +97,17 @@ class Day07 : IPuzzleDay
 
             return 0;
         }
+    }
+
+    enum HandType
+    {
+        FiveOfAKind = 500,
+        FourOfAKind = 400,
+        FullHouse = 350,
+        ThreeOfAKind = 300,
+        TwoPair = 200,
+        OnePair = 100,
+        HighCard = 1,
     }
 
     class Card : IComparable<Card>
