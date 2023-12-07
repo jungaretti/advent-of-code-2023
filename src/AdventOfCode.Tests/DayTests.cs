@@ -328,10 +328,15 @@ public class DayTests
     public void Day07Part1Test()
     {
         string[] inputLines = {
+            "32T3K 765",
+            "T55J5 684",
+            "KK677 28",
+            "KTJJT 220",
+            "QQQJA 483",
         };
 
         var answer = puzzleSolver.SolvePuzzle(7, 1, inputLines);
-        Assert.Equal("", answer);
+        Assert.Equal("6440", answer);
     }
 
     [Fact]
