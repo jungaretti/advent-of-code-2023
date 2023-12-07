@@ -323,4 +323,24 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(6, 2, inputLines);
         Assert.Equal("71503", answer);
     }
+
+    [Fact]
+    public void Day07Part1Test()
+    {
+        string[] inputLines = {
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(7, 1, inputLines);
+        Assert.Equal("", answer);
+    }
+
+    [Fact]
+    public void Day07Part2Test()
+    {
+        string[] inputLines = {
+        };
+
+        var answer = puzzleSolver.SolvePuzzle(7, 2, inputLines);
+        Assert.Equal("", answer);
+    }
 }
