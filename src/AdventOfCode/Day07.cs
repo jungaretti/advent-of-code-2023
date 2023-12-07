@@ -43,11 +43,11 @@ class Day07 : IPuzzleDay
 
         private HandType GetHandType()
         {
-            var cardCounts = new Dictionary<char, int>();
+            var cardCounts = new Dictionary<CardType, int>();
             foreach (Card card in Cards)
             {
-                var newCount = cardCounts.GetValueOrDefault(card.Label, 0) + 1;
-                cardCounts[card.Label] = newCount;
+                var newCount = cardCounts.GetValueOrDefault(card.Type, 0) + 1;
+                cardCounts[card.Type] = newCount;
             }
 
             if (cardCounts.Values.Any(count => count == 5))
@@ -112,29 +112,55 @@ class Day07 : IPuzzleDay
 
     class Card : IComparable<Card>
     {
-        public char Label { get; }
+        public CardType Type { get; }
 
-        public Card(char label)
+        public Card(char label, bool parseJokers = false)
         {
-            Label = label;
+            Type = GetType(label, parseJokers);
         }
 
-        private int GetValue()
+        private CardType GetType(char label, bool parseJokers = false)
         {
-            return Label switch
+            return label switch
             {
-                'A' => 100,
-                'K' => 90,
-                'Q' => 80,
-                'J' => 70,
-                'T' => 60,
-                _ => int.Parse(Label.ToString()),
+                'A' => CardType.Ace,
+                'K' => CardType.King,
+                'Q' => CardType.Queen,
+                'J' => parseJokers ? CardType.Joker : CardType.Jack,
+                'T' => CardType.Ten,
+                '9' => CardType.Nine,
+                '8' => CardType.Eight,
+                '7' => CardType.Seven,
+                '6' => CardType.Six,
+                '5' => CardType.Five,
+                '4' => CardType.Four,
+                '3' => CardType.Three,
+                '2' => CardType.Two,
+                _ => throw new Exception("Invalid card label"),
             };
         }
 
         public int CompareTo(Card? other)
         {
-            return GetValue().CompareTo(other?.GetValue());
+            return Type.CompareTo(other?.Type);
         }
+    }
+
+    enum CardType
+    {
+        Ace = 100,
+        King = 90,
+        Queen = 80,
+        Jack = 70,
+        Ten = 60,
+        Nine = 50,
+        Eight = 40,
+        Seven = 30,
+        Six = 20,
+        Five = 10,
+        Four = 4,
+        Three = 3,
+        Two = 2,
+        Joker = 1,
     }
 }
