@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
@@ -134,12 +133,7 @@ class Day07 : IPuzzleDay
 
         public Card(char label, bool parseJokers = false)
         {
-            Type = GetType(label, parseJokers);
-        }
-
-        private CardType GetType(char label, bool parseJokers = false)
-        {
-            return label switch
+            Type = label switch
             {
                 'A' => CardType.Ace,
                 'K' => CardType.King,
