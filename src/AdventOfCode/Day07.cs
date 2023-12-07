@@ -20,7 +20,13 @@ class Day07 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        IEnumerable<Hand> hands = inputLines.Select(line => new Hand(line, parseJokers: true));
+
+        IEnumerable<Hand> sortedHands = hands.Order();
+        IEnumerable<int> winnings = sortedHands.Zip(Enumerable.Range(1, int.MaxValue), (hand, rank) => hand.Bid * rank);
+        int answer = winnings.Sum();
+
+        return answer.ToString();
     }
 
     class Hand : IComparable<Hand>
@@ -29,7 +35,7 @@ class Day07 : IPuzzleDay
 
         public int Bid { get; }
 
-        public Hand(string handLine)
+        public Hand(string handLine, bool parseJokers = false)
         {
             var regex = new Regex(@"(\S+)\s+(\d+)");
             var match = regex.Match(handLine);
@@ -37,7 +43,7 @@ class Day07 : IPuzzleDay
             var cardLabels = match.Groups[1].Value.ToCharArray();
             var bid = int.Parse(match.Groups[2].Value);
 
-            Cards = cardLabels.Select(label => new Card(label)).ToArray();
+            Cards = cardLabels.Select(label => new Card(label, parseJokers)).ToArray();
             Bid = bid;
         }
 
@@ -48,6 +54,18 @@ class Day07 : IPuzzleDay
             {
                 var newCount = cardCounts.GetValueOrDefault(card.Type, 0) + 1;
                 cardCounts[card.Type] = newCount;
+            }
+
+            if (cardCounts.TryGetValue(CardType.Joker, out int jokerCount))
+            {
+                if (jokerCount == 5)
+                {
+                    return HandType.FiveOfAKind;
+                }
+
+                CardType mostCommonNonJoker = cardCounts.Where(pair => pair.Key != CardType.Joker).MaxBy(pair => pair.Value).Key;
+                cardCounts[mostCommonNonJoker] += jokerCount;
+                cardCounts[CardType.Joker] = 0;
             }
 
             if (cardCounts.Values.Any(count => count == 5))
