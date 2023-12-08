@@ -353,4 +353,44 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(7, 2, inputLines);
         Assert.Equal("5905", answer);
     }
+
+    [Fact]
+    public void Day08Part1Test()
+    {
+        string[] inputLines = [
+            "RL",
+            "",
+            "AAA = (BBB, CCC)",
+            "BBB = (DDD, EEE)",
+            "CCC = (ZZZ, GGG)",
+            "DDD = (DDD, DDD)",
+            "EEE = (EEE, EEE)",
+            "GGG = (GGG, GGG)",
+            "ZZZ = (ZZZ, ZZZ)",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(8, 1, inputLines);
+        Assert.Equal("2", answer);
+
+        inputLines = [
+            "LLR",
+            "",
+            "AAA = (BBB, BBB)",
+            "BBB = (AAA, ZZZ)",
+            "ZZZ = (ZZZ, ZZZ)",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(8, 1, inputLines);
+        Assert.Equal("6", answer);
+    }
+
+    [Fact]
+    public void Day08Part2Test()
+    {
+        string[] inputLines = [
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(8, 2, inputLines);
+        Assert.Equal("", answer);
+    }
 }
