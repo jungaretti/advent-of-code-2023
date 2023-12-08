@@ -9,8 +9,7 @@ class Day08 : IPuzzleDay
     public string PartOne(IEnumerable<string> inputLines)
     {
         var instructions = ParseInstructions(inputLines.First());
-        var nodes = ParseNodes(inputLines.Skip(2));
-        var network = new Network(nodes);
+        var network = new Network(inputLines.Skip(2));
 
         var answer = network.GetStepsToFollowInstructions(instructions, new[] { "AAA" });
         return answer.ToString();
@@ -31,32 +30,29 @@ class Day08 : IPuzzleDay
         });
     }
 
-    private IEnumerable<Node> ParseNodes(IEnumerable<string> networkLines)
-    {
-        var regex = new Regex(@"^(\w+) = \((\w+), (\w+)\)$");
-        return networkLines.Select(line =>
-        {
-            var match = regex.Match(line);
-            if (!match.Success)
-            {
-                throw new Exception($"Failed to parse line: {line}");
-            }
-
-            string id = match.Groups[1].Value;
-            string leftId = match.Groups[2].Value;
-            string rightId = match.Groups[3].Value;
-
-            Node node = new Node(id, leftId, rightId);
-            return node;
-        });
-    }
-
     class Network
     {
         private Dictionary<string, Node> nodesById;
 
-        public Network(IEnumerable<Node> nodes)
+        public Network(IEnumerable<string> networkLines)
         {
+            var regex = new Regex(@"^(\w+) = \((\w+), (\w+)\)$");
+            var nodes = networkLines.Select(line =>
+            {
+                var match = regex.Match(line);
+                if (!match.Success)
+                {
+                    throw new Exception($"Failed to parse line: {line}");
+                }
+
+                string id = match.Groups[1].Value;
+                string leftId = match.Groups[2].Value;
+                string rightId = match.Groups[3].Value;
+
+                Node node = new Node(id, leftId, rightId);
+                return node;
+            });
+
             nodesById = nodes.ToDictionary(node => node.Id);
         }
 
