@@ -1,4 +1,4 @@
-class Helpers
+public class MathHelpers
 {
     public static long GreatestCommonDivisor(long x, long y)
     {
