@@ -1,6 +1,6 @@
 class Helpers
 {
-    public static long Gcd(long x, long y)
+    public static long GreatestCommonDivisor(long x, long y)
     {
         while (y != 0)
         {
@@ -12,8 +12,8 @@ class Helpers
         return x;
     }
 
-    public static long Lcm(long a, long b)
+    public static long LeastCommonMultiple(long a, long b)
     {
-        return (a / Gcd(a, b)) * b;
+        return a / GreatestCommonDivisor(a, b) * b;
     }
 }

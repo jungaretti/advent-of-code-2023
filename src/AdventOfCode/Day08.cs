@@ -23,7 +23,7 @@ class Day08 : IPuzzleDay
         IEnumerable<Node> startNodes = network.Nodes.Where((node) => node.Id.EndsWith("A"));
         IEnumerable<int> stepCounts = startNodes.Select((node) => network.GetStepCountForInstructions(instructions, node.Id, (node) => node.Id.EndsWith("Z")));
 
-        long answer = stepCounts.Aggregate((long)1, (acc, current) => Helpers.Lcm(acc, current));
+        long answer = stepCounts.Aggregate((long)1, (acc, current) => Helpers.LeastCommonMultiple(acc, current));
         return answer.ToString();
     }
 
