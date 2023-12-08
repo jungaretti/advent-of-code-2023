@@ -12,8 +12,13 @@ public class MathHelpers
         return x;
     }
 
-    public static long LeastCommonMultiple(long a, long b)
+    public static long LeastCommonMultiple(long val1, long val2)
     {
-        return a / GreatestCommonDivisor(a, b) * b;
+        return val1 / GreatestCommonDivisor(val1, val2) * val2;
+    }
+
+    public static long LeastCommonMultiple(IEnumerable<long> values)
+    {
+        return values.Aggregate(LeastCommonMultiple);
     }
 }
