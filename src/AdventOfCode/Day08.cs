@@ -10,31 +10,10 @@ class Day08 : IPuzzleDay
     {
         var instructions = ParseInstructions(inputLines.First());
         var nodes = ParseNodes(inputLines.Skip(2));
+        var network = new Network(nodes);
 
-        int instructionIndex = 0;
-        int stepCount = 0;
-        Node currentNode = nodes.Single(node => node.Id == "AAA");
-        do
-        {
-            var oldNode = currentNode;
-            var instruction = instructions.ElementAt(instructionIndex % instructions.Count());
-            switch (instruction.Direction)
-            {
-                case Direction.Left:
-                    currentNode = nodes.Single(node => node.Id == currentNode.Left);
-                    break;
-                case Direction.Right:
-                    currentNode = nodes.Single(node => node.Id == currentNode.Right);
-                    break;
-            }
-
-            Console.WriteLine($"Moving {instruction.Direction} from {oldNode.Id} to {currentNode.Id}");
-
-            stepCount++;
-            instructionIndex++;
-        } while (currentNode.Id != "ZZZ");
-
-        return stepCount.ToString();
+        var answer = network.GetStepsToFollowInstructions(instructions, new[] { "AAA" });
+        return answer.ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
@@ -72,7 +51,45 @@ class Day08 : IPuzzleDay
         });
     }
 
-    private record Node(string Id, string Left, string Right);
+    class Network
+    {
+        private Dictionary<string, Node> nodesById;
+
+        public Network(IEnumerable<Node> nodes)
+        {
+            nodesById = nodes.ToDictionary(node => node.Id);
+        }
+
+        public int GetStepsToFollowInstructions(IEnumerable<Instruction> instructions, IEnumerable<string> startNodeIds)
+        {
+            int instructionIndex = 0;
+            int stepCount = 0;
+            Node currentNode = nodesById[startNodeIds.First()];
+            do
+            {
+                var oldNode = currentNode;
+                var instruction = instructions.ElementAt(instructionIndex % instructions.Count());
+                switch (instruction.Direction)
+                {
+                    case Direction.Left:
+                        currentNode = nodesById[currentNode.LeftId];
+                        break;
+                    case Direction.Right:
+                        currentNode = nodesById[currentNode.RightId];
+                        break;
+                }
+
+                Console.WriteLine($"Moving {instruction.Direction} from {oldNode.Id} to {currentNode.Id}");
+
+                stepCount++;
+                instructionIndex++;
+            } while (currentNode.Id != "ZZZ");
+
+            return stepCount;
+        }
+    }
+
+    private record Node(string Id, string LeftId, string RightId);
 
     private record Instruction(Direction Direction);
 
