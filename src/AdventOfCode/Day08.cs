@@ -17,7 +17,14 @@ class Day08 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        throw new NotImplementedException();
+        var instructions = ParseInstructions(inputLines.First());
+        var network = new Network(inputLines.Skip(2));
+
+        IEnumerable<Node> startNodes = network.Nodes.Where((node) => node.Id.EndsWith("A"));
+        IEnumerable<int> stepCounts = startNodes.Select((node) => network.GetStepCountForInstructions(instructions, node.Id, (node) => node.Id.EndsWith("Z")));
+
+        long answer = stepCounts.Aggregate((long)1, (acc, current) => Helpers.Lcm(acc, current));
+        return answer.ToString();
     }
 
     private IEnumerable<Instruction> ParseInstructions(string instructionsLine)
@@ -33,6 +40,8 @@ class Day08 : IPuzzleDay
     class Network
     {
         private Dictionary<string, Node> nodesById;
+
+        public IEnumerable<Node> Nodes => nodesById.Values;
 
         public Network(IEnumerable<string> networkLines)
         {
