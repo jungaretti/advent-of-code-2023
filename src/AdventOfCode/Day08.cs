@@ -11,7 +11,7 @@ class Day08 : IPuzzleDay
         var instructions = ParseInstructions(inputLines.First());
         var network = new Network(inputLines.Skip(2));
 
-        var answer = network.GetStepCountForInstructions(instructions, (node) => node.Id == "AAA", (node) => node.Id == "ZZZ");
+        var answer = network.GetStepCountForInstructions(instructions, "AAA", (node) => node.Id == "ZZZ");
         return answer.ToString();
     }
 
@@ -56,26 +56,25 @@ class Day08 : IPuzzleDay
             nodesById = nodes.ToDictionary(node => node.Id);
         }
 
-        public int GetStepCountForInstructions(IEnumerable<Instruction> instructions, Func<Node, bool> startNodePredicate, Func<Node, bool> endNodePredicate)
+        public int GetStepCountForInstructions(IEnumerable<Instruction> instructions, string startNodeId, Func<Node, bool> endNodePredicate)
         {
             int stepCount = 0;
 
             Instruction[] instructionsArray = instructions.ToArray();
             int currentInstructionIndex = 0;
 
-            IEnumerable<Node> currentNodes = nodesById.Values.Where(startNodePredicate);
-            while (currentNodes.Any(node => !endNodePredicate(node)))
+            Node currentNode = nodesById[startNodeId];
+            while (!endNodePredicate(currentNode))
             {
                 Instruction currentInstruction = instructionsArray[currentInstructionIndex % instructionsArray.Length];
 
-                var newNodes = currentNodes.Select(currentNode => currentInstruction.Direction switch
+                currentNode = currentInstruction.Direction switch
                 {
                     Direction.Left => nodesById[currentNode.LeftId],
                     Direction.Right => nodesById[currentNode.RightId],
                     _ => throw new Exception($"Unknown instruction: {currentInstruction.Direction}"),
-                });
+                };
 
-                currentNodes = newNodes;
                 currentInstructionIndex++;
                 stepCount++;
             }
