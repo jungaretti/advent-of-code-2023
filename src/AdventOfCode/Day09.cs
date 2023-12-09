@@ -32,40 +32,37 @@ class Day09 : IPuzzleDay
             Values = historyLine.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
         }
 
+        private History(IEnumerable<int> values)
+        {
+            Values = values;
+        }
+
         public int GetNextValue()
         {
-            var nextValue = DeriveNextValue(Values);
+            if (Values.All(value => value == 0))
+            {
+                return 0;
+            }
+
+            int nextValue = Values.Last() + DeriveHistory().GetNextValue();
             return nextValue;
         }
 
         public int GetPreviousValue()
         {
-            var previousValue = DerivePreviousValue(Values);
-            return previousValue;
-        }
-
-        private int DeriveNextValue(IEnumerable<int> values)
-        {
-            if (values.All(value => value == 0))
+            if (Values.All(value => value == 0))
             {
                 return 0;
             }
 
-            IEnumerable<int> derivatives = values.Zip(values.Skip(1), (last, current) => current - last);
-            int nextValue = values.Last() + DeriveNextValue(derivatives);
-            return nextValue;
+            int previousValue = Values.First() - DeriveHistory().GetPreviousValue();
+            return previousValue;
         }
 
-        private int DerivePreviousValue(IEnumerable<int> values)
+        private History DeriveHistory()
         {
-            if (values.All(value => value == 0))
-            {
-                return 0;
-            }
-
-            IEnumerable<int> derivatives = values.Zip(values.Skip(1), (last, current) => current - last);
-            int previousValue = values.First() - DerivePreviousValue(derivatives);
-            return previousValue;
+            IEnumerable<int> derivatives = Values.Zip(Values.Skip(1), (last, current) => current - last);
+            return new History(derivatives);
         }
     }
 }
