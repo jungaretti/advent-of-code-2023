@@ -403,4 +403,27 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(8, 2, inputLines);
         Assert.Equal("6", answer);
     }
+
+    [Fact]
+    public void Day09Part1Test()
+    {
+        string[] inputLines = [
+            "0 3 6 9 12 15",
+            "1 3 6 10 15 21",
+            "10 13 16 21 30 45",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(9, 1, inputLines);
+        Assert.Equal("114", answer);
+    }
+
+    [Fact]
+    public void Day09Part2Test()
+    {
+        string[] inputLines = [
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(9, 2, inputLines);
+        Assert.Equal("", answer);
+    }
 }
