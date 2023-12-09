@@ -16,7 +16,11 @@ class Day09 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        return "0";
+        IEnumerable<History> histories = inputLines.Select(line => new History(line));
+        IEnumerable<int> previousValues = histories.Select(history => history.GetPreviousValue());
+
+        var answer = previousValues.Sum();
+        return answer.ToString();
     }
 
     private class History
@@ -34,6 +38,12 @@ class Day09 : IPuzzleDay
             return nextValue;
         }
 
+        public int GetPreviousValue()
+        {
+            var previousValue = DerivePreviousValue(Values);
+            return previousValue;
+        }
+
         private int DeriveNextValue(IEnumerable<int> values)
         {
             if (values.All(value => value == 0))
@@ -44,6 +54,18 @@ class Day09 : IPuzzleDay
             IEnumerable<int> derivatives = values.Zip(values.Skip(1), (last, current) => current - last);
             int nextValue = values.Last() + DeriveNextValue(derivatives);
             return nextValue;
+        }
+
+        private int DerivePreviousValue(IEnumerable<int> values)
+        {
+            if (values.All(value => value == 0))
+            {
+                return 0;
+            }
+
+            IEnumerable<int> derivatives = values.Zip(values.Skip(1), (last, current) => current - last);
+            int previousValue = values.First() - DerivePreviousValue(derivatives);
+            return previousValue;
         }
     }
 }
