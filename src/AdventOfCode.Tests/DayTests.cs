@@ -449,14 +449,39 @@ public class DayTests
     public void Day10Part2Test()
     {
         string[] inputLines = [
-            "7-F7-",
-            ".FJ|7",
-            "SJLL7",
-            "|F--J",
-            "LJ.LJ",
         ];
 
         var answer = puzzleSolver.SolvePuzzle(10, 2, inputLines);
-        Assert.Equal("8", answer);
+        Assert.Equal("", answer);
+    }
+
+    [Fact]
+    public void Day11Part1Test()
+    {
+        string[] inputLines = [
+            "...#......",
+            ".......#..",
+            "#.........",
+            "..........",
+            "......#...",
+            ".#........",
+            ".........#",
+            "..........",
+            ".......#..",
+            "#...#.....",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(11, 1, inputLines);
+        Assert.Equal("374", answer);
+    }
+
+    [Fact]
+    public void Day11Part2Test()
+    {
+        string[] inputLines = [
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(11, 2, inputLines);
+        Assert.Equal("", answer);
     }
 }
