@@ -429,4 +429,34 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(9, 2, inputLines);
         Assert.Equal("2", answer);
     }
+
+    [Fact]
+    public void Day10Part1Test()
+    {
+        string[] inputLines = [
+            ".....",
+            ".S-7.",
+            ".|.|.",
+            ".L-J.",
+            ".....",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(10, 1, inputLines);
+        Assert.Equal("4", answer);
+    }
+
+    [Fact]
+    public void Day10Part2Test()
+    {
+        string[] inputLines = [
+            "7-F7-",
+            ".FJ|7",
+            "SJLL7",
+            "|F--J",
+            "LJ.LJ",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(10, 2, inputLines);
+        Assert.Equal("8", answer);
+    }
 }
