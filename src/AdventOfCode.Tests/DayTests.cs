@@ -484,4 +484,35 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(11, 2, inputLines);
         Assert.Equal("", answer);
     }
+
+    [Fact]
+    public void Day12Part1Test()
+    {
+        string[] inputLines = [
+            "?###???????? 3,2,1",
+            ".###.##.#...",
+            ".###.##..#..",
+            ".###.##...#.",
+            ".###.##....#",
+            ".###..##.#..",
+            ".###..##..#.",
+            ".###..##...#",
+            ".###...##.#.",
+            ".###...##..#",
+            ".###....##.#",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(12, 1, inputLines);
+        Assert.Equal("21", answer);
+    }
+
+    [Fact]
+    public void Day12Part2Test()
+    {
+        string[] inputLines = [
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(12, 2, inputLines);
+        Assert.Equal("", answer);
+    }
 }

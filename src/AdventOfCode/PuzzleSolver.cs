@@ -19,6 +19,7 @@ public class PuzzleSolver
             new Day09(),
             new Day10(),
             new Day11(),
+            new Day12(),
         };
     }
 
