@@ -429,4 +429,14 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(9, 2, inputLines);
         Assert.Equal("2", answer);
     }
+
+    [Fact]
+    public void Day14Part1Test()
+    {
+        string[] inputLines = [
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(14, 1, inputLines);
+        Assert.Equal("", answer);
+    }
 }
