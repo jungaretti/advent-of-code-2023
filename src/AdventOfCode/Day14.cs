@@ -9,8 +9,8 @@ class Day14 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        var platform = ParsePlatform(inputLines);
-        IEnumerable<IEnumerable<RockType?>> rockCols = GetCols(platform.Rocks);
+        var rocks = ParseRocks(inputLines);
+        IEnumerable<IEnumerable<Rock>> rockCols = Rotate90Clockwise(rocks);
         IEnumerable<IEnumerable<RockType?>> tiltedRocks = rockCols.Select(TiltRocks);
         var rockScores = tiltedRocks.Select(rocks => RockScores(rocks).Sum());
 
@@ -38,7 +38,7 @@ class Day14 : IPuzzleDay
         }
     }
 
-    private IEnumerable<IEnumerable<TSource>> GetCols<TSource>(TSource[][] values)
+    private IEnumerable<IEnumerable<TSource>> Rotate90Clockwise<TSource>(TSource[][] values)
     {
         var colCount = values[0].Length;
         for (int colIndex = 0; colIndex < colCount; colIndex++)
@@ -47,14 +47,14 @@ class Day14 : IPuzzleDay
         }
     }
 
-    private IEnumerable<RockType?> TiltRocks(IEnumerable<RockType?> rocks)
+    private IEnumerable<RockType?> TiltRocks(IEnumerable<Rock> rocks)
     {
         if (rocks.Count() == 0)
         {
-            return rocks;
+            return rocks.Select(rock => rock.Type);
         }
 
-        var barrierIndex = rocks.ToList().IndexOf(RockType.Cube);
+        var barrierIndex = rocks.ToList().FindIndex(rock => rock.Type == RockType.Cube);
         if (barrierIndex == -1)
         {
             barrierIndex = rocks.Count();
@@ -62,13 +62,13 @@ class Day14 : IPuzzleDay
 
         var tiledRocks = rocks
             .Take(barrierIndex + 1)
-            .OrderBy(rock => rock switch
+            .OrderBy(rock => rock.Type switch
             {
                 RockType.Rounded => 1,
                 null => 2,
                 RockType.Cube => 3,
                 _ => throw new Exception($"Unknown rock type: {rock}")
-            });
+            }).Select(rock => rock.Type);
         var otherRocks = TiltRocks(rocks.Skip(barrierIndex + 1));
 
         return [
@@ -77,19 +77,19 @@ class Day14 : IPuzzleDay
         ];
     }
 
-    private Platform ParsePlatform(IEnumerable<string> inputLines)
+    private Rock[][] ParseRocks(IEnumerable<string> inputLines)
     {
-        var rocks = inputLines.Select(line => line.Select<char, RockType?>(rockChar => rockChar switch
+        Rock[][] rocks = inputLines.Select((row, rowIndex) => row.Select((value, colIndex) => value switch
         {
-            'O' => RockType.Rounded,
-            '#' => RockType.Cube,
-            '.' => null,
-            _ => throw new Exception($"Unknown rock type: {rockChar}")
+            'O' => new Rock(RockType.Rounded, rowIndex, colIndex),
+            '#' => new Rock(RockType.Cube, rowIndex, colIndex),
+            '.' => new Rock(null, rowIndex, colIndex),
+            _ => throw new Exception($"Unknown rock type: {value}")
         }).ToArray()).ToArray();
-        return new Platform(rocks);
+        return rocks;
     }
 
-    record Platform(RockType?[][] Rocks);
+    record Rock(RockType? Type, int Row, int Col);
 
     enum RockType
     {
