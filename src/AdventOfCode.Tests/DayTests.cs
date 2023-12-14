@@ -434,9 +434,19 @@ public class DayTests
     public void Day14Part1Test()
     {
         string[] inputLines = [
+            "O....#....",
+            "O.OO#....#",
+            ".....##...",
+            "OO.#O....O",
+            ".O.....O#.",
+            "O.#..O.#.#",
+            "..O..#O..O",
+            ".......O..",
+            "#....###..",
+            "#OO..#....",
         ];
 
         var answer = puzzleSolver.SolvePuzzle(14, 1, inputLines);
-        Assert.Equal("", answer);
+        Assert.Equal("136", answer);
     }
 }
