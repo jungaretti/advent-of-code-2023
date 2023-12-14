@@ -1,6 +1,4 @@
 
-using System.Collections.Immutable;
-
 namespace AdventOfCode;
 
 class Day14 : IPuzzleDay
