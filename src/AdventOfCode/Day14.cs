@@ -12,9 +12,9 @@ class Day14 : IPuzzleDay
         var rocks = ParseRocks(inputLines);
         IEnumerable<IEnumerable<Rock>> rockCols = Rotate90Clockwise(rocks);
         IEnumerable<IEnumerable<Rock>> tiltedRocks = rockCols.Select(TiltRocks);
-        var rockScores = tiltedRocks.Select(rocks => RockScores(rocks).Sum());
+        IEnumerable<int> totalLoads = tiltedRocks.Select(GetTotalLoad);
 
-        var answer = rockScores.Sum();
+        var answer = totalLoads.Sum();
         return answer.ToString();
     }
 
@@ -23,19 +23,19 @@ class Day14 : IPuzzleDay
         throw new NotImplementedException();
     }
 
-    private IEnumerable<int> RockScores(IEnumerable<Rock> values)
+    private int GetTotalLoad(IEnumerable<Rock> rocks)
     {
-        int nextScore = values.Count();
-        foreach (Rock rock in values)
+        int totalLoad = 0;
+        int nextScore = rocks.Count();
+        foreach (Rock rock in rocks)
         {
-            int score = nextScore;
-            nextScore--;
-
             if (rock.Type == RockType.Rounded)
             {
-                yield return score;
+                totalLoad += nextScore;
             }
+            nextScore--;
         }
+        return totalLoad;
     }
 
     private IEnumerable<IEnumerable<TSource>> Rotate90Clockwise<TSource>(TSource[][] values)
