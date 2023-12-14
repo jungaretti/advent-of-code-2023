@@ -7,12 +7,13 @@ class Day14 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        var rocks = ParseRocks(inputLines);
-        IEnumerable<IEnumerable<Rock>> rockCols = Rotate90Clockwise(rocks);
-        IEnumerable<IEnumerable<Rock>> tiltedRocks = rockCols.Select(TiltRocks);
-        IEnumerable<int> totalLoads = tiltedRocks.Select(GetTotalLoad);
+        Rock[][] rocks = ParseRocks(inputLines);
 
-        var answer = totalLoads.Sum();
+        Rock[][] rotatedRocks = RotateRocksClockwise(rocks);
+        IEnumerable<IEnumerable<Rock>> tiltedRocks = rotatedRocks.Select(TiltRocks);
+        IEnumerable<int> totalLoads = tiltedRocks.Select(GetTotalLoad);
+        int answer = totalLoads.Sum();
+
         return answer.ToString();
     }
 
@@ -34,15 +35,6 @@ class Day14 : IPuzzleDay
             nextScore--;
         }
         return totalLoad;
-    }
-
-    private IEnumerable<IEnumerable<TSource>> Rotate90Clockwise<TSource>(TSource[][] values)
-    {
-        var colCount = values[0].Length;
-        for (int colIndex = 0; colIndex < colCount; colIndex++)
-        {
-            yield return values.Select(row => row[colIndex]);
-        }
     }
 
     private IEnumerable<Rock> TiltRocks(IEnumerable<Rock> rocks)
@@ -73,6 +65,22 @@ class Day14 : IPuzzleDay
             ..tiledRocks,
             ..otherRocks,
         ];
+    }
+
+    private Rock[][] RotateRocksClockwise(Rock[][] values)
+    {
+        var colCount = values[0].Length;
+        var rowCount = values.Length;
+        Rock[][] rotatedValues = new Rock[colCount][];
+        for (int colIndex = 0; colIndex < colCount; colIndex++)
+        {
+            rotatedValues[colIndex] = new Rock[rowCount];
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                rotatedValues[colIndex][rowIndex] = values[rowIndex][colIndex];
+            }
+        }
+        return rotatedValues;
     }
 
     private Rock[][] ParseRocks(IEnumerable<string> inputLines)
