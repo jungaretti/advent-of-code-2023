@@ -11,7 +11,7 @@ class Day14 : IPuzzleDay
     {
         var rocks = ParseRocks(inputLines);
         IEnumerable<IEnumerable<Rock>> rockCols = Rotate90Clockwise(rocks);
-        IEnumerable<IEnumerable<RockType?>> tiltedRocks = rockCols.Select(TiltRocks);
+        IEnumerable<IEnumerable<Rock>> tiltedRocks = rockCols.Select(TiltRocks);
         var rockScores = tiltedRocks.Select(rocks => RockScores(rocks).Sum());
 
         var answer = rockScores.Sum();
@@ -23,15 +23,15 @@ class Day14 : IPuzzleDay
         throw new NotImplementedException();
     }
 
-    private IEnumerable<int> RockScores(IEnumerable<RockType?> values)
+    private IEnumerable<int> RockScores(IEnumerable<Rock> values)
     {
         int nextScore = values.Count();
-        foreach (RockType? rock in values)
+        foreach (Rock rock in values)
         {
             int score = nextScore;
             nextScore--;
 
-            if (rock == RockType.Rounded)
+            if (rock.Type == RockType.Rounded)
             {
                 yield return score;
             }
@@ -47,11 +47,11 @@ class Day14 : IPuzzleDay
         }
     }
 
-    private IEnumerable<RockType?> TiltRocks(IEnumerable<Rock> rocks)
+    private IEnumerable<Rock> TiltRocks(IEnumerable<Rock> rocks)
     {
         if (rocks.Count() == 0)
         {
-            return rocks.Select(rock => rock.Type);
+            return [];
         }
 
         var barrierIndex = rocks.ToList().FindIndex(rock => rock.Type == RockType.Cube);
@@ -68,7 +68,7 @@ class Day14 : IPuzzleDay
                 null => 2,
                 RockType.Cube => 3,
                 _ => throw new Exception($"Unknown rock type: {rock}")
-            }).Select(rock => rock.Type);
+            });
         var otherRocks = TiltRocks(rocks.Skip(barrierIndex + 1));
 
         return [
