@@ -17,7 +17,7 @@ class Day15 : IPuzzleDay
     {
         IEnumerable<string> steps = inputLines.First().Split(',');
 
-        Box[] boxes = new Box[256];
+        Box[] boxes = Enumerable.Range(0, 256).Select(_ => new Box()).ToArray();
         foreach (string item in steps)
         {
             int operationIndex = item.IndexOfAny(['=', '-']);
@@ -25,10 +25,6 @@ class Day15 : IPuzzleDay
             string label = item.Substring(0, operationIndex);
 
             int boxIndex = GetHash(label);
-            if (boxes[boxIndex] == null)
-            {
-                boxes[boxIndex] = new Box();
-            }
             Box box = boxes[boxIndex];
 
             switch (operation)
@@ -45,7 +41,23 @@ class Day15 : IPuzzleDay
             }
         }
 
-        throw new NotImplementedException();
+        List<int> focusingPowers = [];
+        for (int boxIndex = 0; boxIndex < boxes.Length; boxIndex++)
+        {
+            Box box = boxes[boxIndex];
+            for (int lensIndex = 0; lensIndex < box.Lenses.Count; lensIndex++)
+            {
+                Lens lens = box.Lenses[lensIndex];
+                int boxValue = boxIndex + 1;
+                int lensValue = lensIndex + 1;
+                int focalLength = lens.FocalLength;
+                int focusingPower = boxValue * lensValue * focalLength;
+                focusingPowers.Add(focusingPower);
+            }
+        }
+
+        var answer = focusingPowers.Sum();
+        return answer.ToString();
     }
 
     private class Box
