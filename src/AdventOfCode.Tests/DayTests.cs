@@ -449,4 +449,22 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(14, 1, inputLines);
         Assert.Equal("136", answer);
     }
+
+    [Fact]
+    public void Day15Part1Test()
+    {
+        string[] inputLines = [
+            "HASH",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(15, 1, inputLines);
+        Assert.Equal("52", answer);
+
+        inputLines = [
+            "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(15, 1, inputLines);
+        Assert.Equal("1320", answer);
+    }
 }
