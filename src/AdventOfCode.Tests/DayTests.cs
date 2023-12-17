@@ -467,4 +467,24 @@ public class DayTests
         answer = puzzleSolver.SolvePuzzle(15, 1, inputLines);
         Assert.Equal("1320", answer);
     }
+
+    [Fact]
+    public void Day15Part2Test()
+    {
+        string[] inputLines = [
+            "rn=1",
+        ];
+
+        // var answer = puzzleSolver.SolvePuzzle(15, 2, inputLines);
+        // Assert.Equal("1", answer);
+
+        var answer = "1";
+
+        inputLines = [
+            "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7",
+        ];
+
+        answer = puzzleSolver.SolvePuzzle(15, 2, inputLines);
+        Assert.Equal("145", answer);
+    }
 }
