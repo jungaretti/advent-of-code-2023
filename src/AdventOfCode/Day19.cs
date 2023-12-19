@@ -13,12 +13,53 @@ class Day19 : IPuzzleDay
         IEnumerable<Workflow> workflows = ParseWorkflows(inputLines.TakeWhile(line => line != string.Empty));
         IEnumerable<Part> parts = ParseParts(inputLines.SkipWhile(line => line != string.Empty).Skip(1));
 
-        return "0";
+        var acceptedParts = parts.Where(part => RunWorkflow(workflows, "in", part) == "A");
+        var acceptedPartsSums = acceptedParts.Select(SumPart);
+        var answer = acceptedPartsSums.Sum();
+
+        return answer.ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
         return "0";
+    }
+
+    private int SumPart(Part part)
+    {
+        return part.X + part.M + part.A + part.S;
+    }
+
+    private string RunWorkflow(IEnumerable<Workflow> workflows, string workflowId, Part part)
+    {
+        Dictionary<string, Workflow> workflowDictionary = workflows.ToDictionary(w => w.Id);
+
+        Workflow currentWorkflow = workflowDictionary[workflowId];
+        do
+        {
+            string workflowResult = RunRules(currentWorkflow, part);
+            if (workflowResult == "A" || workflowResult == "R")
+            {
+                return workflowResult;
+            }
+
+            currentWorkflow = workflowDictionary[workflowResult];
+        } while (true);
+    }
+
+    private string RunRules(Workflow workflow, Part parts)
+    {
+        string? ruleResult = null;
+        foreach (var rule in workflow.Rules)
+        {
+            ruleResult = rule(parts);
+            if (ruleResult != null)
+            {
+                return ruleResult;
+            }
+        }
+
+        throw new Exception($"Workflow did not terminate: {workflow.Id}");
     }
 
     private IEnumerable<Workflow> ParseWorkflows(IEnumerable<string> inputLines)
