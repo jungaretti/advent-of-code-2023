@@ -11,7 +11,7 @@ partial class Day19 : IPuzzleDay
         IEnumerable<Workflow> workflows = ParseWorkflows(inputLines.TakeWhile(line => line != string.Empty));
         IEnumerable<Part> parts = ParseParts(inputLines.SkipWhile(line => line != string.Empty).Skip(1));
 
-        var acceptedParts = parts.Where(part => RunWorkflow(workflows, "in", part) == "A");
+        var acceptedParts = parts.Where(part => IsAccepted(workflows, part));
         var acceptedPartsSums = acceptedParts.Select(SumPart);
         var answer = acceptedPartsSums.Sum();
 
@@ -28,17 +28,21 @@ partial class Day19 : IPuzzleDay
         return part.X + part.M + part.A + part.S;
     }
 
-    private string RunWorkflow(IEnumerable<Workflow> workflows, string workflowId, Part part)
+    private bool IsAccepted(IEnumerable<Workflow> workflows, Part part)
     {
         Dictionary<string, Workflow> workflowDictionary = workflows.ToDictionary(w => w.Id);
 
-        Workflow currentWorkflow = workflowDictionary[workflowId];
+        Workflow currentWorkflow = workflowDictionary["in"];
         do
         {
             string workflowResult = RunRules(currentWorkflow, part);
-            if (workflowResult == "A" || workflowResult == "R")
+            if (workflowResult == "A")
             {
-                return workflowResult;
+                return true;
+            }
+            else if (workflowResult == "R")
+            {
+                return false;
             }
 
             currentWorkflow = workflowDictionary[workflowResult];
