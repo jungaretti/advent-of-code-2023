@@ -1,10 +1,8 @@
-
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
 
-class Day19 : IPuzzleDay
+partial class Day19 : IPuzzleDay
 {
     public int Day => 19;
 
@@ -62,12 +60,14 @@ class Day19 : IPuzzleDay
         throw new Exception($"Workflow did not terminate: {workflow.Id}");
     }
 
+    [GeneratedRegex(@"(\w+){(.+)}")]
+    private static partial Regex GetWorkflowRegex();
+
     private IEnumerable<Workflow> ParseWorkflows(IEnumerable<string> inputLines)
     {
-        var workflowRegex = new Regex(@"(\w+){(.+)}");
         foreach (string line in inputLines)
         {
-            var match = workflowRegex.Match(line);
+            var match = GetWorkflowRegex().Match(line);
             if (match.Success == false)
             {
                 throw new Exception($"Failed to parse workflow: {line}");
@@ -80,10 +80,15 @@ class Day19 : IPuzzleDay
         }
     }
 
+    [GeneratedRegex(@"(\w+)([<\\>])(\d+):(\w+)")]
+    private static partial Regex GetComplexRuleRegex();
+
+    [GeneratedRegex(@"(\w+)")]
+    private static partial Regex GetSimpleRuleRegex();
+
     private Func<Part, string?> ParseRule(string rule)
     {
-        var complexRuleRegex = new Regex(@"(\w+)([<\\>])(\d+):(\w+)");
-        var complexMatch = complexRuleRegex.Match(rule);
+        var complexMatch = GetComplexRuleRegex().Match(rule);
         if (complexMatch.Success)
         {
             string propertyName = complexMatch.Groups[1].Value.ToUpper();
@@ -103,8 +108,7 @@ class Day19 : IPuzzleDay
             };
         }
 
-        var simpleRuleRegex = new Regex(@"(\w+)");
-        var simpleMatch = simpleRuleRegex.Match(rule);
+        var simpleMatch = GetSimpleRuleRegex().Match(rule);
         if (simpleMatch.Success)
         {
             return _ => simpleMatch.Groups[1].Value;
@@ -113,12 +117,14 @@ class Day19 : IPuzzleDay
         throw new Exception($"Failed to parse rule: {rule}");
     }
 
+    [GeneratedRegex(@"{x=(\d+),m=(\d+),a=(\d+),s=(\d+)}")]
+    private static partial Regex GetPartRegex();
+
     private IEnumerable<Part> ParseParts(IEnumerable<string> inputLines)
     {
-        var partRegex = new Regex(@"{x=(\d+),m=(\d+),a=(\d+),s=(\d+)}");
         foreach (string line in inputLines)
         {
-            var match = partRegex.Match(line);
+            var match = GetPartRegex().Match(line);
             if (match.Success == false)
             {
                 throw new Exception($"Failed to parse part: {line}");
