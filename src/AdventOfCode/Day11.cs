@@ -20,7 +20,15 @@ class Day11 : IPuzzleDay
 
     public string PartTwo(IEnumerable<string> inputLines)
     {
-        return "0";
+        var galaxies = ParseGalaxies(inputLines);
+        var grownGalaxies = GrowGalaxies(galaxies, 1000000);
+
+        var galaxyPairs = GetGalaxyPairs(grownGalaxies);
+        var galaxyDistances = galaxyPairs
+            .Select(pair => DistanceBetweenGalaxies(pair.Item1, pair.Item2));
+
+        var answer = galaxyDistances.Sum();
+        return answer.ToString();
     }
 
     private IEnumerable<Galaxy> ParseGalaxies(IEnumerable<string> inputLines)
@@ -32,7 +40,7 @@ class Day11 : IPuzzleDay
         );
     }
 
-    private IEnumerable<Galaxy> GrowRows(IEnumerable<Galaxy> galaxies)
+    private IEnumerable<Galaxy> GrowRows(IEnumerable<Galaxy> galaxies, int growthFactor)
     {
         var sortedByRow = galaxies
             .OrderBy(galaxy => galaxy.Row);
@@ -43,7 +51,7 @@ class Day11 : IPuzzleDay
         {
             if (galaxy.Row > lastRow + 1)
             {
-                rowOffset += galaxy.Row - lastRow - 1;
+                rowOffset += (galaxy.Row - lastRow - 1) * (growthFactor - 1);
             }
             if (galaxy.Row != lastRow)
             {
@@ -53,7 +61,7 @@ class Day11 : IPuzzleDay
         }
     }
 
-    private IEnumerable<Galaxy> GrowCols(IEnumerable<Galaxy> galaxies)
+    private IEnumerable<Galaxy> GrowCols(IEnumerable<Galaxy> galaxies, int growthFactor)
     {
         var sortedByCol = galaxies
             .OrderBy(galaxy => galaxy.Column);
@@ -64,7 +72,7 @@ class Day11 : IPuzzleDay
         {
             if (galaxy.Column > lastCol + 1)
             {
-                colOffset += galaxy.Column - lastCol - 1;
+                colOffset += (galaxy.Column - lastCol - 1) * (growthFactor - 1);
             }
             if (galaxy.Column != lastCol)
             {
@@ -74,10 +82,10 @@ class Day11 : IPuzzleDay
         }
     }
 
-    private IEnumerable<Galaxy> GrowGalaxies(IEnumerable<Galaxy> galaxies)
+    private IEnumerable<Galaxy> GrowGalaxies(IEnumerable<Galaxy> galaxies, int growthFactor = 2)
     {
-        var grownRows = GrowRows(galaxies);
-        var grownCols = GrowCols(grownRows);
+        var grownRows = GrowRows(galaxies, growthFactor);
+        var grownCols = GrowCols(grownRows, growthFactor);
         return grownCols;
     }
 
@@ -93,7 +101,7 @@ class Day11 : IPuzzleDay
         }
     }
 
-    private int DistanceBetweenGalaxies(Galaxy first, Galaxy second)
+    private long DistanceBetweenGalaxies(Galaxy first, Galaxy second)
     {
         return Math.Abs(first.Row - second.Row) + Math.Abs(first.Column - second.Column);
     }
