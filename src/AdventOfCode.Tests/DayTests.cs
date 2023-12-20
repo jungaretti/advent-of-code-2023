@@ -431,6 +431,26 @@ public class DayTests
     }
 
     [Fact]
+    public void Day11Part1Test()
+    {
+        string[] inputLines = [
+            "...#......",
+            ".......#..",
+            "#.........",
+            "..........",
+            "......#...",
+            ".#........",
+            ".........#",
+            "..........",
+            ".......#..",
+            "#...#.....",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(11, 1, inputLines);
+        Assert.Equal("374", answer);
+    }
+
+    [Fact]
     public void Day14Part1Test()
     {
         string[] inputLines = [
