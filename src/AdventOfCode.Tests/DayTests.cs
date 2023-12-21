@@ -587,6 +587,7 @@ public class DayTests
     public void Day21Part1Test()
     {
         string[] inputLines = [
+            "6",
             "...........",
             ".....###.#.",
             ".###.##..#.",

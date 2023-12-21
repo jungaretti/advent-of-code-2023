@@ -8,8 +8,10 @@ class Day21 : IPuzzleDay
 
     public string PartOne(IEnumerable<string> inputLines)
     {
-        var garden = new Garden(inputLines);
-        var possibleTiles = garden.Walk(6);
+        var stepCount = int.Parse(inputLines.First());
+
+        var garden = new Garden(inputLines.Skip(1));
+        var possibleTiles = garden.Walk(stepCount);
 
         var answer = possibleTiles.Count();
         return answer.ToString();
