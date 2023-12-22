@@ -54,6 +54,20 @@ class Day22 : IPuzzleDay
         }
     }
 
+    private IEnumerable<Coordinate> GetAllCoordinates(Brick brick)
+    {
+        for (int x = brick.Start.X; x <= brick.End.X; x++)
+        {
+            for (int y = brick.Start.Y; y <= brick.End.Y; y++)
+            {
+                for (int z = brick.Start.Z; z <= brick.End.Z; z++)
+                {
+                    yield return new Coordinate(x, y, z);
+                }
+            }
+        }
+    }
+
     private record Brick(Coordinate Start, Coordinate End);
 
     private record Coordinate(int X, int Y, int Z);
