@@ -604,4 +604,21 @@ public class DayTests
         var answer = puzzleSolver.SolvePuzzle(21, 1, inputLines);
         Assert.Equal("16", answer);
     }
+
+    [Fact]
+    public void Day22Part1Test()
+    {
+        string[] inputLines = [
+            "1,0,1~1,2,1",
+            "0,0,2~2,0,2",
+            "0,2,3~2,2,3",
+            "0,0,4~0,2,4",
+            "2,0,5~2,2,5",
+            "0,1,6~2,1,6",
+            "1,1,8~1,1,9",
+        ];
+
+        var answer = puzzleSolver.SolvePuzzle(22, 1, inputLines);
+        Assert.Equal("5", answer);
+    }
 }
