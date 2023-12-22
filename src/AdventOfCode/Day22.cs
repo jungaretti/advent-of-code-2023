@@ -31,15 +31,25 @@ class Day22 : IPuzzleDay
                 throw new Exception($"Could not parse brick: {line}");
             }
 
-            yield return new Brick(
-                new Coordinate(
+            var coordinates = new Coordinate[]
+            {
+                new(
                     int.Parse(match.Groups[1].Value),
                     int.Parse(match.Groups[2].Value),
                     int.Parse(match.Groups[3].Value)),
-                new Coordinate(
+                new(
                     int.Parse(match.Groups[4].Value),
                     int.Parse(match.Groups[5].Value),
                     int.Parse(match.Groups[6].Value))
+            };
+            var orderedCoordinates = coordinates
+                .OrderBy(coordinate => coordinate.Z)
+                .ThenBy(coordinate => coordinate.Y)
+                .ThenBy(coordinate => coordinate.X);
+
+            yield return new Brick(
+                orderedCoordinates.First(),
+                orderedCoordinates.Last()
             );
         }
     }
