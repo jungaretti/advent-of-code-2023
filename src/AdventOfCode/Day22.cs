@@ -15,9 +15,11 @@ class Day22 : IPuzzleDay
         foreach (var brick in bricks.OrderBy(b => b.Start.Z))
         {
             IEnumerable<Coordinate> brickCoordinates = GetAllCoordinates(brick);
-            IEnumerable<Brick> bricksBelow = brickCoordinates.Select(coordinate => platform[coordinate.Y][coordinate.X]);
+            IEnumerable<Brick> bricksBelow = brickCoordinates
+                .Select(coordinate => platform[coordinate.Y][coordinate.X])
+                .OfType<Brick>();
 
-            int supportingZ = bricksBelow.Max(b => b.End.Z);
+            int supportingZ = bricksBelow.MaxBy(b => b.End.Z)?.End.Z ?? 0;
             HashSet<Brick> supportingBricks = bricksBelow.Where(b => b.End.Z == supportingZ).ToHashSet();
 
             var brickHeight = brick.End.Z - brick.Start.Z + 1;
@@ -43,19 +45,15 @@ class Day22 : IPuzzleDay
 
     private readonly Regex brickRegex = new(@"^(\d+),(\d+),(\d+)~(\d+),(\d+),(\d+)$", RegexOptions.Compiled);
 
-    Brick[][] BuildPlatform(IEnumerable<Brick> bricks)
+    Brick?[][] BuildPlatform(IEnumerable<Brick> bricks)
     {
         int maxX = bricks.MaxBy(b => b.End.X)?.End.X ?? throw new Exception("Could not find max X");
         int maxY = bricks.MaxBy(b => b.End.Y)?.End.Y ?? throw new Exception("Could not find max Y");
 
-        Brick platformBrick = new Brick(
-            new Coordinate(0, 0, 0),
-            new Coordinate(maxX, maxY, 0));
-
-        Brick[][] platform = new Brick[maxY + 1][];
+        Brick?[][] platform = new Brick[maxY + 1][];
         for (int y = 0; y < platform.Length; y++)
         {
-            platform[y] = Enumerable.Repeat(platformBrick, maxX + 1).ToArray();
+            platform[y] = Enumerable.Repeat<Brick?>(null, maxX + 1).ToArray();
         }
 
         return platform;
