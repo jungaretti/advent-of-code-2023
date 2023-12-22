@@ -12,6 +12,27 @@ class Day22 : IPuzzleDay
         var bricks = ParseBricks(inputLines);
         var platform = BuildPlatform(bricks);
 
+        foreach (var brick in bricks.OrderBy(b => b.Start.Z))
+        {
+            IEnumerable<Coordinate> brickCoordinates = GetAllCoordinates(brick);
+            IEnumerable<Brick> bricksBelow = brickCoordinates.Select(coordinate => platform[coordinate.Y][coordinate.X]);
+
+            int supportingZ = bricksBelow.Max(b => b.End.Z);
+            HashSet<Brick> supportingBricks = bricksBelow.Where(b => b.End.Z == supportingZ).ToHashSet();
+
+            var brickHeight = brick.End.Z - brick.Start.Z + 1;
+            var settledBrick = brick with
+            {
+                Start = brick.Start with { Z = supportingZ + 1 },
+                End = brick.End with { Z = supportingZ + brickHeight }
+            };
+
+            foreach (var coordinate in brickCoordinates)
+            {
+                platform[coordinate.Y][coordinate.X] = settledBrick;
+            }
+        }
+
         return "0";
     }
 
