@@ -12,6 +12,12 @@ class Day22 : IPuzzleDay
         var bricks = ParseBricks(inputLines);
         var platform = BuildPlatform(bricks);
 
+        // Brick to the bricks that it supports
+        Dictionary<Brick, HashSet<Brick>> supportedBy = new();
+
+        // Brick to the bricks that support it (inverse of supportedBy)
+        Dictionary<Brick, HashSet<Brick>> supports = new();
+
         foreach (var brick in bricks.OrderBy(b => b.Start.Z))
         {
             IEnumerable<Coordinate> brickCoordinates = GetAllCoordinates(brick);
@@ -29,13 +35,40 @@ class Day22 : IPuzzleDay
                 End = brick.End with { Z = supportingZ + brickHeight }
             };
 
+            supports.Add(settledBrick, new());
+            supportedBy.Add(settledBrick, supportingBricks);
+            foreach (var supportingBrick in supportingBricks)
+            {
+                supports[supportingBrick].Add(settledBrick);
+            }
+
             foreach (var coordinate in brickCoordinates)
             {
                 platform[coordinate.Y][coordinate.X] = settledBrick;
             }
         }
 
-        return "0";
+        IEnumerable<Brick> settledBricks = supports.Keys;
+        HashSet<Brick> answer = new();
+
+        foreach (var brick in settledBricks)
+        {
+            var canRemoveBrick = true;
+            foreach (var dependentBrick in supports[brick])
+            {
+                if (supportedBy[dependentBrick].Count == 1)
+                {
+                    canRemoveBrick = false;
+                }
+            }
+
+            if (canRemoveBrick)
+            {
+                answer.Add(brick);
+            }
+        }
+
+        return answer.Count.ToString();
     }
 
     public string PartTwo(IEnumerable<string> inputLines)
