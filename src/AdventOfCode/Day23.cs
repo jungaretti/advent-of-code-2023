@@ -85,7 +85,7 @@ class Day23 : IPuzzleDay
         // Find the longest path
         var dfsSeen = new HashSet<Coordinate>();
 
-        int dfs(Coordinate coordinate)
+        int LongestDistance(Coordinate coordinate)
         {
             if (coordinate == end)
                 return 0;
@@ -95,14 +95,14 @@ class Day23 : IPuzzleDay
             dfsSeen.Add(coordinate);
             foreach (var nextCoordinate in graph[coordinate].Keys)
             {
-                m = Math.Max(m, dfs(nextCoordinate) + graph[coordinate][nextCoordinate]);
+                m = Math.Max(m, LongestDistance(nextCoordinate) + graph[coordinate][nextCoordinate]);
             }
             dfsSeen.Remove(coordinate);
 
             return m;
         }
 
-        var answer = dfs(start);
+        var answer = LongestDistance(start);
         return answer.ToString();
     }
 
